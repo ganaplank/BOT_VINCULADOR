@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <title>Bot Vinculador PRO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="/eel.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- BARRA LATERAL (SIDEBAR NAVEGAÇÃO) -->
+        <aside class="app-sidebar" id="sidebar">
+            <div class="sidebar-header-top">
+                <div class="logo">
+                    <span class="dot"></span> <span class="logo-text">Vinculador PRO</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="operacao">
+                    <span class="nav-icon">▶</span> Operação do Robô
+                </button>
+                <button class="nav-item" data-tab="historico">
+                    <span class="nav-icon">📋</span> Prints e Histórico
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-content">
+                    <button id="btn_toggle_logs" class="btn btn-outline btn-sm w-100 mb-3">📜 Ver Logs do Sistema</button>
+                    <div class="d-flex flex-between w-100">
+                        <span style="font-size: 0.85rem; color: var(--text-muted);">Tema UI</span>
+                        <button id="theme-toggle" class="btn-icon" title="Alternar Modo Escuro/Claro">☀️</button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="app-main">
+            
+            <header class="main-header">
+                <button id="btn_toggle_sidebar" class="btn-icon" title="Recolher/Expandir Menu">☰</button>
+                <span class="header-title">Painel de Controle</span>
+            </header>
+
+            <!-- ABA: OPERAÇÃO -->
+            <section id="operacao" class="tab-content active h-100">
+                <div class="dashboard-grid h-100">
+                    
+                    <!-- COLUNA ESQUERDA: CONTROLES DO MOTORISTA -->
+                    <div class="col-controls">
+                        
+                        <!-- Card 1: Setup Inicial -->
+                        <div class="card">
+                            <h2>1. Configurações e Login</h2>
+                            <div class="input-group mb-3">
+                                <label>Usuário</label>
+                                <input type="text" id="usuario" placeholder="VICTOR_NORONHA">
+                            </div>
+                            <div class="input-group mb-3">
+                                <label>Senha</label>
+                                <input type="password" id="senha" placeholder="••••••••">
+                            </div>
+                            <div class="input-group mb-4">
+                                <label>Condomínio</label>
+                                <input type="text" id="condominio" placeholder="Ex: 123">
+                            </div>
+                            
+                            <div class="d-flex gap-4 mb-4">
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" id="lembrar_login" checked>
+                                    <span class="checkmark"></span>
+                                    Salvar Login
+                                </label>
+                                <label class="checkbox-wrapper">
+                                    <input type="checkbox" id="lembrar_condominio">
+                                    <span class="checkmark"></span>
+                                    Salvar Condomínio
+                                </label>
+                            </div>
+
+                            <button id="btn_abrir" class="btn btn-primary w-100 text-lg">Abrir Sistema</button>
+                        </div>
+
+                        <!-- Card 2: Ações Principais -->
+                        <div class="card card-actions flex-1">
+                            <h2>2. Controles de Execução</h2>
+                            <p class="subtitle" style="font-size: 0.8rem;">Após logar no sistema, clique para carregar a tabela na coluna ao lado.</p>
+                            
+                            <button id="btn_ler" class="btn btn-secondary w-100 mb-4" disabled>🔍 Ler Unidades da Tela</button>
+                            
+                            <!-- Barra de status da leitura -->
+                            <div id="status_leitura" class="status-bar mb-4" style="display:none;"></div>
+
+                            <div class="divider"></div>
+
+                            <label class="checkbox-wrapper mb-4">
+                                <input type="checkbox" id="vincular_agregadas" checked>
+                                <span class="checkmark"></span>
+                                Incluir unidades agregadas no vínculo
+                            </label>
+
+                            <div class="actions-row gap-4 mt-auto">
+                                <button id="btn_iniciar" class="btn btn-success flex-1 text-lg" disabled>▶ INICIAR ROBÔ</button>
+                                <button id="btn_parar" class="btn btn-danger flex-1 text-lg" disabled>⏹ PARAR</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- COLUNA DIREITA: DADOS E SELEÇÃO -->
+                    <div class="col-data">
+                        <div class="card h-100 flex-col" style="margin-bottom: 0;">
+                            <h2>3. Seleção de Unidades</h2>
+                            
+                            <!-- Filtros -->
+                            <div class="d-flex gap-4 align-end mb-3">
+                                <input type="text" id="busca" class="input-search flex-1" placeholder="Buscar unidade (ex: 101)...">
+                                <button id="btn_limpar_filtro" class="btn btn-sm btn-outline" title="Limpar todos os filtros">✖ Limpar Filtros</button>
+                            </div>
+
+                            <div id="filtros_container" class="filter-row" style="display:none; margin-top: 0; margin-bottom: 16px;">
+                                <div class="filter-group">
+                                    <label>Bloco</label>
+                                    <select id="filtro_bloco" class="filter-select">
+                                        <option value="">Todos</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Número de</label>
+                                    <input type="number" id="filtro_de" class="filter-input" placeholder="Ex: 50" min="0">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Até</label>
+                                    <input type="number" id="filtro_ate" class="filter-input" placeholder="Ex: 500" min="0">
+                                </div>
+                            </div>
+
+                            <!-- Lista -->
+                            <div class="list-container flex-1" id="lista_unidades">
+                                <div class="empty-state">
+                                    <h2>Nenhum dado.</h2>
+                                    <p>Abra o sistema, navegue até a tabela e clique em "Ler Unidades da Tela" no painel ao lado.</p>
+                                </div>
+                            </div>
+
+                            <!-- Ações Rápidas de Seleção -->
+                            <div class="selection-actions mt-3">
+                                <div class="group-global">
+                                    <span class="group-label">GLOBAL:</span>
+                                    <button id="btn_sel_todas" class="btn btn-outline btn-sm">☑ Marcar Tudo</button>
+                                    <button id="btn_des_todas" class="btn btn-outline btn-sm">☐ Desmarcar Tudo</button>
+                                </div>
+                                <div class="group-filtered">
+                                    <span class="group-label">NO FILTRO ATUAL:</span>
+                                    <button id="btn_sel_filtro" class="btn btn-outline btn-sm btn-filter-sel">☑ Selecionar Visíveis</button>
+                                    <button id="btn_des_filtro" class="btn btn-outline btn-sm btn-filter-des">☐ Desmarcar Visíveis</button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ABA: HISTÓRICO -->
+            <section id="historico" class="tab-content h-100">
+                <div class="history-grid h-100">
+                    <div class="card h-100 flex-col" style="margin-bottom: 0;">
+                        <h2>Histórico Geral (Concluídas)</h2>
+                        <p class="subtitle mb-3">Clique em uma unidade na lista para visualizar o comprovante (print).</p>
+                        <div id="lista_historico" class="list-container flex-1">
+                            <div class="empty-state">Nenhum histórico disponível ainda.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card h-100 flex-col" style="margin-bottom: 0;">
+                        <h2>Visualização do Comprovante</h2>
+                        <div class="preview-box flex-1" id="preview_box">
+                            <span id="preview_placeholder">[ Nenhum print selecionado ou indisponível ]</span>
+                            <img id="preview_img" src="" style="display: none;" />
+                        </div>
+                        <div class="actions-row mt-4 gap-4">
+                            <button id="btn_baixar" class="btn btn-secondary flex-1" disabled>💾 Salvar no PC</button>
+                            <button id="btn_excluir" class="btn btn-outline flex-1" disabled>🗑️ Apagar da Memória</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Sidebar flutuante para Logs -->
+    <div id="sidebar_logs" class="sidebar">
+        <div class="sidebar-header">
+            <h2>📜 Console do Robô</h2>
+            <button id="btn_close_logs" class="btn-icon">✖</button>
+        </div>
+        <div class="sidebar-content">
+            <div class="d-flex justify-content-end mb-3">
+                <button id="btn_copiar_erro" class="btn btn-sm btn-outline" style="border-color: rgba(255,255,255,0.2);">📋 Copiar Último Erro</button>
+            </div>
+            <textarea id="log_textarea" readonly></textarea>
+        </div>
+    </div>
+
+    <!-- Overlay Loading Global -->
+    <div id="loading_overlay" class="overlay">
+        <div class="spinner"></div>
+        <p id="loading_text">Aguarde...</p>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

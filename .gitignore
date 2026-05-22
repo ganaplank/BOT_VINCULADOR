@@ -1,0 +1,27 @@
+# === PASTAS IGNORADAS ===
+__pycache__/
+build/
+dist/
+logs/
+prints_vinculos/
+
+# === ARQUIVOS DE CONFIGURAÇÃO LOCAIS ===
+.env
+config.json
+historico_concluidas.txt
+*.pyc
+
+# === ARQUIVOS DE TESTE E SCRAPING ===
+FONTE IFRAME.html
+FONTE PAGINA.html
+caminhos.txt
+diagnostico*
+validate_syntax.py
+
+# === BACKUPS TEMPORÁRIOS ===
+*BACKUP*
+*.bak
+*.tmp
+roadmap.html
+REFACTORING.md
+INSTRUCOES.txt

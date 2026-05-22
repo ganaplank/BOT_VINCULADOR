@@ -1,0 +1,393 @@
+// Theme Toggle
+const themeBtn = document.getElementById('theme-toggle');
+themeBtn.addEventListener('click', () => {
+    document.documentElement.classList.toggle('light');
+    themeBtn.textContent = document.documentElement.classList.contains('light') ? '🌙' : '☀️';
+});
+
+// Tabs / Sidebar Navigation
+document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+
+// UI Elements
+const btnAbrir = document.getElementById('btn_abrir');
+const btnLer = document.getElementById('btn_ler');
+const btnIniciar = document.getElementById('btn_iniciar');
+const btnParar = document.getElementById('btn_parar');
+const btnCopiar = document.getElementById('btn_copiar_erro');
+const logTextarea = document.getElementById('log_textarea');
+const sidebarLogs = document.getElementById('sidebar_logs');
+const listaUnidades = document.getElementById('lista_unidades');
+const buscaInput = document.getElementById('busca');
+const overlay = document.getElementById('loading_overlay');
+const overlayText = document.getElementById('loading_text');
+
+// State
+let allUnidades = [];
+
+function showLoading(text) {
+    overlayText.textContent = text;
+    overlayText.style.whiteSpace = 'pre-line';
+    overlay.classList.add('active');
+}
+function hideLoading() {
+    overlay.classList.remove('active');
+}
+
+function setStatus(msg) {
+    const bar = document.getElementById('status_leitura');
+    if (!msg) {
+        bar.style.display = 'none';
+        return;
+    }
+    bar.textContent = msg;
+    bar.style.display = 'block';
+}
+
+// EEL Exposed Python Calls
+btnAbrir.addEventListener('click', async () => {
+    const user = document.getElementById('usuario').value.trim();
+    const pwd = document.getElementById('senha').value.trim();
+    const cond = document.getElementById('condominio').value.trim();
+
+    if (!user || !pwd) {
+        alert("Por favor, preencha Usuário e Senha!");
+        return;
+    }
+
+    btnAbrir.disabled = true;
+    showLoading("Iniciando Chrome e logando...");
+    
+    // Salvar ou limpar login localmente
+    const lembrarLogin = document.getElementById('lembrar_login').checked;
+    const lembrarCond = document.getElementById('lembrar_condominio').checked;
+    await eel.salvar_login(user, pwd, cond, lembrarLogin, lembrarCond)();
+
+    // Call Python
+    await eel.abrir_sistema(user, pwd, cond)();
+    
+    hideLoading();
+    btnAbrir.disabled = false;
+});
+
+btnLer.addEventListener('click', async () => {
+    btnLer.disabled = true;
+    btnLer.textContent = '⏳ Verificando...';
+    setStatus('🔍 Lendo tabela de unidades, aguarde...');
+    showLoading('🔍 Verificando unidades na tabela...\nIsso pode levar alguns segundos.');
+    
+    // Inicia a leitura em background — hideLoading() é chamado dentro de atualizar_lista_unidades
+    await eel.ler_unidades()();
+});
+
+btnIniciar.addEventListener('click', async () => {
+    const cond = document.getElementById('condominio').value.trim();
+    if (!cond) {
+        alert("Preencha o condomínio!");
+        return;
+    }
+
+    // Coletar selecionados
+    const selecionadas = [];
+    document.querySelectorAll('.chk-unidade:checked').forEach(cb => {
+        selecionadas.push(cb.value);
+    });
+
+    if (selecionadas.length === 0) {
+        alert("Selecione pelo menos uma unidade na lista!");
+        return;
+    }
+
+    const vincAgregadas = document.getElementById('vincular_agregadas').checked;
+
+    btnIniciar.disabled = true;
+    btnLer.disabled = true;
+    btnParar.disabled = false;
+
+    await eel.iniciar_robo(cond, selecionadas, vincAgregadas)();
+});
+
+btnParar.addEventListener('click', async () => {
+    btnParar.disabled = true;
+    await eel.parar_robo()();
+});
+
+btnCopiar.addEventListener('click', async () => {
+    const err = await eel.obter_ultimo_erro()();
+    navigator.clipboard.writeText(err);
+    alert("Erro copiado!");
+});
+
+// Enter key to login
+['usuario', 'senha', 'condominio'].forEach(id => {
+    document.getElementById(id).addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') btnAbrir.click();
+    });
+});
+
+// Sidebar Toggle
+document.getElementById('btn_toggle_logs').addEventListener('click', () => {
+    sidebarLogs.classList.add('active');
+});
+document.getElementById('btn_close_logs').addEventListener('click', () => {
+    sidebarLogs.classList.remove('active');
+});
+
+// Sidebar Collapse (Left Nav)
+const btnToggleSidebar = document.getElementById('btn_toggle_sidebar');
+if (btnToggleSidebar) {
+    btnToggleSidebar.addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    });
+}
+
+// =============================================
+// FILTROS
+// =============================================
+
+function applyFilters() {
+    const textTerm  = buscaInput.value.toLowerCase();
+    const bloco     = document.getElementById('filtro_bloco').value;      // e.g. "01" or ""
+    const deVal     = document.getElementById('filtro_de').value;
+    const ateVal    = document.getElementById('filtro_ate').value;
+    const numDe     = deVal  !== '' ? parseInt(deVal,  10) : null;
+    const numAte    = ateVal !== '' ? parseInt(ateVal, 10) : null;
+
+    document.querySelectorAll('.list-item').forEach(item => {
+        const cod  = item.dataset.cod  || '';   // "01/Apart/000052"
+        const parts = cod.split('/');
+        const itemBloco = parts[0] || '';
+        const itemNum   = parseInt(parts[2] || '0', 10);
+        const label = item.querySelector('.chk-label').textContent.toLowerCase();
+
+        const okText  = label.includes(textTerm);
+        const okBloco = bloco === '' || itemBloco === bloco;
+        const okDe    = numDe  === null || itemNum >= numDe;
+        const okAte   = numAte === null || itemNum <= numAte;
+
+        item.style.display = (okText && okBloco && okDe && okAte) ? 'flex' : 'none';
+    });
+}
+
+// Busca por texto
+buscaInput.addEventListener('input', applyFilters);
+
+// Filtro por bloco
+document.getElementById('filtro_bloco').addEventListener('change', applyFilters);
+
+// Filtro por faixa de número
+document.getElementById('filtro_de').addEventListener('input', applyFilters);
+document.getElementById('filtro_ate').addEventListener('input', applyFilters);
+
+// Limpar filtros
+document.getElementById('btn_limpar_filtro').addEventListener('click', () => {
+    document.getElementById('filtro_bloco').value = '';
+    document.getElementById('filtro_de').value = '';
+    document.getElementById('filtro_ate').value = '';
+    buscaInput.value = '';
+    applyFilters();
+});
+
+// =============================================
+// BOTÕES DE SELEÇÃO
+// =============================================
+
+// Selecionar / Desmarcar TODAS (ignora filtro)
+document.getElementById('btn_sel_todas').addEventListener('click', () => {
+    document.querySelectorAll('.chk-unidade').forEach(chk => chk.checked = true);
+});
+document.getElementById('btn_des_todas').addEventListener('click', () => {
+    document.querySelectorAll('.chk-unidade').forEach(chk => chk.checked = false);
+});
+
+// Selecionar / Desmarcar apenas VISÍVEIS (respeita filtro atual)
+document.getElementById('btn_sel_filtro').addEventListener('click', () => {
+    document.querySelectorAll('.list-item').forEach(item => {
+        if (item.style.display !== 'none') {
+            item.querySelector('.chk-unidade').checked = true;
+        }
+    });
+});
+document.getElementById('btn_des_filtro').addEventListener('click', () => {
+    document.querySelectorAll('.list-item').forEach(item => {
+        if (item.style.display !== 'none') {
+            item.querySelector('.chk-unidade').checked = false;
+        }
+    });
+});
+
+
+// EEL Callbacks (Python -> JS)
+eel.expose(log_message);
+function log_message(msg) {
+    logTextarea.value += msg + "\n";
+    logTextarea.scrollTop = logTextarea.scrollHeight;
+}
+
+eel.expose(habilitar_leitura);
+function habilitar_leitura() {
+    btnLer.disabled = false;
+}
+
+eel.expose(atualizar_lista_unidades);
+function atualizar_lista_unidades(unidadesData) {
+    // Esconde o loading quando os dados chegam do Python
+    hideLoading();
+    btnLer.disabled = false;
+    btnLer.textContent = 'Ler Unidades da Tela';
+
+    listaUnidades.innerHTML = '';
+    
+    if (unidadesData.length === 0) {
+        listaUnidades.innerHTML = '<div class="empty-state">Nenhuma unidade encontrada. Verifique se filtrou o condomínio na tela do sistema.</div>';
+        setStatus('⚠️ Nenhuma unidade encontrada.');
+        return;
+    }
+
+    btnIniciar.disabled = false;
+    setStatus(`✅ ${unidadesData.length} unidades carregadas. Selecione as que deseja vincular.`);
+
+    // Extrai blocos únicos para popular o dropdown
+    const blocos = new Set();
+    unidadesData.forEach(u => {
+        const parts = u.nome.split('/');
+        if (parts.length >= 1) blocos.add(parts[0]);
+    });
+
+    const selectBloco = document.getElementById('filtro_bloco');
+    selectBloco.innerHTML = '<option value="">Todos</option>';
+    [...blocos].sort().forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b;
+        opt.textContent = `Bloco ${parseInt(b, 10)}`;
+        selectBloco.appendChild(opt);
+    });
+
+    // Mostra os filtros agora que há dados
+    document.getElementById('filtros_container').style.display = 'flex';
+
+    unidadesData.forEach(u => {
+        const div = document.createElement('label');
+        div.className = `list-item checkbox-wrapper ${u.concluido ? 'concluido' : ''}`;
+        div.dataset.cod = u.nome;   // armazena o código para filtro
+        
+        const chk = document.createElement('input');
+        chk.type = 'checkbox';
+        chk.className = 'chk-unidade';
+        chk.value = u.nome;
+        chk.checked = !u.concluido;
+
+        const span = document.createElement('span');
+        span.className = 'checkmark';
+
+        const txt = document.createElement('span');
+        txt.className = 'chk-label';
+        let labelText = u.concluido ? `[✅ CONCLUÍDO] ${u.nome}` : `[ ] ${u.nome}`;
+        if (u.info) labelText += `    [Agregadas: ${u.info}]`;
+        txt.textContent = labelText;
+
+        div.appendChild(chk);
+        div.appendChild(span);
+        div.appendChild(txt);
+        listaUnidades.appendChild(div);
+    });
+
+    // Aplica filtros atuais (caso já tenha algo digitado)
+    applyFilters();
+}
+
+eel.expose(robo_finalizado);
+function robo_finalizado() {
+    btnIniciar.disabled = false;
+    btnLer.disabled = false;
+    btnParar.disabled = true;
+    alert("Operação Finalizada! Verifique a aba de Histórico.");
+}
+
+eel.expose(atualizar_historico);
+function atualizar_historico(concluidas) {
+    const list = document.getElementById('lista_historico');
+    list.innerHTML = '';
+    if (concluidas.length === 0) {
+        list.innerHTML = '<div class="empty-state">Nenhum histórico disponível.</div>';
+        return;
+    }
+
+    concluidas.forEach(und => {
+        const btn = document.createElement('button');
+        btn.className = 'hist-item';
+        btn.innerHTML = `✅ ${und}`;
+        btn.onclick = async () => {
+            document.querySelectorAll('.hist-item').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            
+            // Carregar preview
+            const base64img = await eel.get_print(und)();
+            if (base64img) {
+                document.getElementById('preview_placeholder').style.display = 'none';
+                document.getElementById('preview_img').src = 'data:image/png;base64,' + base64img;
+                document.getElementById('preview_img').style.display = 'block';
+                document.getElementById('btn_baixar').disabled = false;
+                document.getElementById('btn_excluir').disabled = false;
+                document.getElementById('btn_baixar').onclick = () => baixarPrint(und, base64img);
+                document.getElementById('btn_excluir').onclick = () => excluirPrint(und);
+            } else {
+                document.getElementById('preview_placeholder').textContent = 'Print indisponível (Sessão anterior)';
+                document.getElementById('preview_placeholder').style.display = 'block';
+                document.getElementById('preview_img').style.display = 'none';
+                document.getElementById('btn_baixar').disabled = true;
+                document.getElementById('btn_excluir').disabled = true;
+            }
+        };
+        list.appendChild(btn);
+    });
+}
+
+function baixarPrint(nome, b64) {
+    const a = document.createElement('a');
+    a.href = 'data:image/png;base64,' + b64;
+    a.download = `Comprovante_${nome.replace('/', '_')}.png`;
+    a.click();
+}
+
+async function excluirPrint(nome) {
+    await eel.excluir_print(nome)();
+    document.getElementById('preview_placeholder').textContent = 'Print excluído com sucesso.';
+    document.getElementById('preview_placeholder').style.display = 'block';
+    document.getElementById('preview_img').style.display = 'none';
+    document.getElementById('btn_baixar').disabled = true;
+    document.getElementById('btn_excluir').disabled = true;
+}
+
+// Init
+window.onload = async () => {
+    // Carregar histórico
+    const concluidas = await eel.get_todas_concluidas()();
+    atualizar_historico(concluidas);
+
+    // Carregar login salvo
+    const loginData = await eel.obter_login_salvo()();
+    if (loginData) {
+        if (loginData.usuario) {
+            document.getElementById('usuario').value = loginData.usuario;
+            document.getElementById('senha').value = loginData.senha;
+            document.getElementById('lembrar_login').checked = true;
+        } else {
+            document.getElementById('lembrar_login').checked = false;
+        }
+        
+        if (loginData.condominio) {
+            document.getElementById('condominio').value = loginData.condominio;
+            document.getElementById('lembrar_condominio').checked = true;
+        } else {
+            document.getElementById('lembrar_condominio').checked = false;
+        }
+    }
+};
