@@ -37,3 +37,8 @@ A próxima tarefa que o usuário deseja implementar é o **Sistema de Auto-Updat
 
 ---
 **[Instrução para a IA de Casa]:** O usuário deseja começar imediatamente a implementar o sistema de Auto-Update descrito no passo 4. Verifique a estrutura atual nos arquivos `main.js`, `app_vinculador.py` e crie as funções necessárias.
+
+## 5. Tarefas Secundárias Futuras (Aviso de Antivírus)
+O usuário relatou que o executável gerado pelo PyInstaller está disparando avisos de falso positivo no Windows Defender ("vírus"). 
+- **Solução Definida:** Compilar o *bootloader* do PyInstaller localmente na máquina do usuário para alterar o hash do binário.
+- **Instrução para a IA:** Quando o usuário solicitar, baixe o source do PyInstaller, certifique-se de que há um compilador C instalado (como MinGW/GCC) e execute o processo de compilação do bootloader antes de gerar o próximo build da aplicação.
