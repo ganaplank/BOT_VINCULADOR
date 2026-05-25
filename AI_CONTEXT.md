@@ -55,7 +55,7 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
 
 - `[ ]` Mudar layout para rolagem de página natural (estilo website):
   - `[ ]` Alterar `.app-main` em `style.css` para ter scroll vertical (`overflow-y: auto`)
-  - `[ ]` Ajustar `web/index.html` removendo a classe `h-100` do card de seleção
+  - `[x]` Ajustar `web/index.html` removendo a classe `h-100` do card de seleção
   - `[ ]` Remover limites de altura de flexbox e permitir que `.list-container` e `#mapeamento_blocos` cresçam naturalmente
   - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
