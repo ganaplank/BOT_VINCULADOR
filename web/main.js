@@ -283,7 +283,8 @@ function atualizar_lista_unidades(unidadesData) {
     [...blocos].sort().forEach(b => {
         const opt = document.createElement('option');
         opt.value = b;
-        opt.textContent = `Bloco ${parseInt(b, 10)}`;
+        const valInt = parseInt(b, 10);
+        opt.textContent = `Bloco ${isNaN(valInt) ? b : valInt}`;
         selectBloco.appendChild(opt);
     });
 
@@ -294,9 +295,11 @@ function atualizar_lista_unidades(unidadesData) {
         const row = document.createElement('div');
         row.className = 'mapa-row';
         row.dataset.bloco = b;
+        const valInt = parseInt(b, 10);
+        const labelText = `Bloco ${isNaN(valInt) ? b : valInt}`;
         row.innerHTML = `
-            <span class="mapa-bloco-name">Bloco ${parseInt(b, 10)}</span>
-            <input type="text" placeholder="Ex: 506" title="Condomínio do Bloco ${parseInt(b, 10)}">
+            <span class="mapa-bloco-name">${labelText}</span>
+            <input type="text" placeholder="Ex: 506" title="Condomínio do ${labelText}">
         `;
         mapaRows.appendChild(row);
     });

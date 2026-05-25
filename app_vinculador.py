@@ -263,7 +263,11 @@ class BotBackend:
         blocos_usados = set(u.split('/')[0] for u in unidades_alvo if '/' in u)
         for bloco in sorted(blocos_usados):
             cond = mapa_condominios.get(bloco, mapa_condominios.get('default', '?'))
-            self.log(f"  Bloco {int(bloco):02d} → Condomínio {cond}")
+            try:
+                bloco_show = f"{int(bloco):02d}"
+            except ValueError:
+                bloco_show = bloco
+            self.log(f"  Bloco {bloco_show} → Condomínio {cond}")
 
         aba_principal = self.driver.current_window_handle
 
