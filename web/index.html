@@ -43,17 +43,23 @@
             <header class="main-header">
                 <button id="btn_toggle_sidebar" class="btn-icon" title="Recolher/Expandir Menu">☰</button>
                 <span class="header-title">Painel de Controle</span>
+                
+                <!-- Session Bar -->
+                <div id="session_bar" class="session-bar" style="display: none;">
+                    <span class="session-text">👤 <strong>Sessão:</strong> <span id="session_info"></span></span>
+                    <button id="btn_finalizar_sessao" class="btn btn-danger btn-sm">Finalizar Sessão Atual</button>
+                </div>
             </header>
 
             <!-- ABA: OPERAÇÃO -->
             <section id="operacao" class="tab-content active h-100">
                 <div class="dashboard-grid h-100">
                     
-                    <!-- COLUNA ESQUERDA: CONTROLES DO MOTORISTA -->
-                    <div class="col-controls">
+                    <!-- COLUNA ESQUERDA: LOGIN (Ocultado quando ativo) -->
+                    <div class="col-controls" id="login_column">
                         
                         <!-- Card 1: Setup Inicial -->
-                        <div class="card">
+                        <div class="card" id="card_login">
                             <h2>1. Configurações e Login</h2>
                             <div class="input-group mb-3">
                                 <label>Usuário</label>
@@ -70,16 +76,6 @@
                                 <p>Após logar, abra a tela de usuários do <strong>condomínio mãe (geral)</strong>. Clique em <strong>"Ler Unidades"</strong> para o robô detectar todos os blocos — depois preencha a tabela abaixo com o condomínio de cada bloco.</p>
                             </div>
 
-                            <!-- Mapeamento por Bloco (aparece após ler unidades) -->
-                            <div id="mapeamento_blocos" style="display:none;">
-                                <div class="mapa-header">
-                                    <span class="mapa-label-col">Bloco</span>
-                                    <span class="mapa-label-col">Condomínio</span>
-                                </div>
-                                <div id="mapa_rows"></div>
-                                <p class="mapa-hint">⚠️ Preencha o condomínio de cada bloco antes de iniciar o robô.</p>
-                            </div>
-
                             <div class="d-flex gap-4 mb-4">
                                 <label class="checkbox-wrapper">
                                     <input type="checkbox" id="lembrar_login" checked>
@@ -91,79 +87,94 @@
                             <button id="btn_abrir" class="btn btn-primary w-100 text-lg">Abrir Sistema</button>
                         </div>
 
-                        <!-- Card 2: Ações Principais -->
-                        <div class="card card-actions flex-1">
-                            <h2>2. Controles de Execução</h2>
-                            <p class="subtitle" style="font-size: 0.8rem;">Após logar no sistema, clique para carregar a tabela na coluna ao lado.</p>
-                            
-                            <button id="btn_ler" class="btn btn-secondary w-100 mb-4" disabled>🔍 Ler Unidades da Tela</button>
-                            
-                            <!-- Barra de status da leitura -->
-                            <div id="status_leitura" class="status-bar mb-4" style="display:none;"></div>
-
-                            <div class="divider"></div>
-
-                            <label class="checkbox-wrapper mb-4">
-                                <input type="checkbox" id="vincular_agregadas" checked>
-                                <span class="checkmark"></span>
-                                Incluir unidades agregadas no vínculo
-                            </label>
-
-                            <div class="actions-row gap-4 mt-auto">
-                                <button id="btn_iniciar" class="btn btn-success flex-1 text-lg" disabled>▶ INICIAR ROBÔ</button>
-                                <button id="btn_parar" class="btn btn-danger flex-1 text-lg" disabled>⏹ PARAR</button>
-                            </div>
-                        </div>
-
                     </div>
 
-                    <!-- COLUNA DIREITA: DADOS E SELEÇÃO -->
-                    <div class="col-data">
-                        <div class="card h-100 flex-col" style="margin-bottom: 0;">
-                            <h2>3. Seleção de Unidades</h2>
+                    <!-- COLUNA DIREITA: DADOS E SELEÇÃO (Expande para tela inteira) -->
+                    <div class="col-data" id="data_column">
+                        <div class="card h-100 flex-col" id="card_selecao" style="margin-bottom: 0;">
+                            <h2>Checklist de Unidades</h2>
                             
-                            <!-- Filtros -->
-                            <div class="d-flex gap-4 align-end mb-3">
-                                <input type="text" id="busca" class="input-search flex-1" placeholder="Buscar unidade (ex: 101)...">
-                                <button id="btn_limpar_filtro" class="btn btn-sm btn-outline" title="Limpar todos os filtros">✖ Limpar Filtros</button>
+                            <!-- Layout Principal Operacional: Mapeamento de blocos + lista de unidades lado a lado -->
+                            <div class="main-operational-layout flex-1 mb-4">
+                                
+                                <!-- Mapeamento por Bloco (lado esquerdo) -->
+                                <div id="mapeamento_blocos" style="display:none;">
+                                    <div class="mapa-header">
+                                        <span class="mapa-label-col">Bloco</span>
+                                        <span class="mapa-label-col">Condomínio</span>
+                                    </div>
+                                    <div id="mapa_rows"></div>
+                                    <p class="mapa-hint">⚠️ Preencha o condomínio de cada bloco antes de iniciar o robô.</p>
+                                </div>
+
+                                <!-- Checklist e Filtros (lado direito / principal) -->
+                                <div class="checklist-area flex-col flex-1">
+                                    <!-- Filtros -->
+                                    <div class="d-flex gap-4 align-end mb-3">
+                                        <input type="text" id="busca" class="input-search flex-1" placeholder="Buscar unidade (ex: 101)...">
+                                        <button id="btn_limpar_filtro" class="btn btn-sm btn-outline" title="Limpar todos os filtros">✖ Limpar Filtros</button>
+                                    </div>
+
+                                    <div id="filtros_container" class="filter-row" style="display:none; margin-top: 0; margin-bottom: 16px;">
+                                        <div class="filter-group">
+                                            <label>Bloco</label>
+                                            <select id="filtro_bloco" class="filter-select">
+                                                <option value="">Todos</option>
+                                            </select>
+                                        </div>
+                                        <div class="filter-group">
+                                            <label>Número de</label>
+                                            <input type="number" id="filtro_de" class="filter-input" placeholder="Ex: 50" min="0">
+                                        </div>
+                                        <div class="filter-group">
+                                            <label>Até</label>
+                                            <input type="number" id="filtro_ate" class="filter-input" placeholder="Ex: 500" min="0">
+                                        </div>
+                                    </div>
+
+                                    <!-- Lista -->
+                                    <div class="list-container flex-1" id="lista_unidades">
+                                        <div class="empty-state">
+                                            <h2>Nenhum dado carregado.</h2>
+                                            <p>Abra o sistema e faça login para carregar as unidades e controles.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Ações Rápidas de Seleção -->
+                                    <div class="selection-actions mt-3">
+                                        <div class="group-global">
+                                            <span class="group-label">GLOBAL:</span>
+                                            <button id="btn_sel_todas" class="btn btn-outline btn-sm">☑ Marcar Tudo</button>
+                                            <button id="btn_des_todas" class="btn btn-outline btn-sm">☐ Desmarcar Tudo</button>
+                                        </div>
+                                        <div class="group-filtered">
+                                            <span class="group-label">NO FILTRO ATUAL:</span>
+                                            <button id="btn_sel_filtro" class="btn btn-outline btn-sm btn-filter-sel">☑ Selecionar Visíveis</button>
+                                            <button id="btn_des_filtro" class="btn btn-outline btn-sm btn-filter-des">☐ Desmarcar Visíveis</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
 
-                            <div id="filtros_container" class="filter-row" style="display:none; margin-top: 0; margin-bottom: 16px;">
-                                <div class="filter-group">
-                                    <label>Bloco</label>
-                                    <select id="filtro_bloco" class="filter-select">
-                                        <option value="">Todos</option>
-                                    </select>
+                            <!-- Rodapé do Card: Controles de Execução (Ocultos até o login) -->
+                            <div id="controles_operacao" style="display: none;">
+                                <div class="divider"></div>
+                                <div class="d-flex justify-between align-center mb-4 gap-4">
+                                    <button id="btn_ler" class="btn btn-secondary flex-1 text-md">🔍 Ler Unidades da Tela</button>
+                                    <label class="checkbox-wrapper">
+                                        <input type="checkbox" id="vincular_agregadas" checked>
+                                        <span class="checkmark"></span>
+                                        Incluir unidades agregadas no vínculo
+                                    </label>
                                 </div>
-                                <div class="filter-group">
-                                    <label>Número de</label>
-                                    <input type="number" id="filtro_de" class="filter-input" placeholder="Ex: 50" min="0">
-                                </div>
-                                <div class="filter-group">
-                                    <label>Até</label>
-                                    <input type="number" id="filtro_ate" class="filter-input" placeholder="Ex: 500" min="0">
-                                </div>
-                            </div>
+                                
+                                <!-- Barra de status da leitura -->
+                                <div id="status_leitura" class="status-bar mb-4" style="display:none;"></div>
 
-                            <!-- Lista -->
-                            <div class="list-container flex-1" id="lista_unidades">
-                                <div class="empty-state">
-                                    <h2>Nenhum dado.</h2>
-                                    <p>Abra o sistema, navegue até a tabela e clique em "Ler Unidades da Tela" no painel ao lado.</p>
-                                </div>
-                            </div>
-
-                            <!-- Ações Rápidas de Seleção -->
-                            <div class="selection-actions mt-3">
-                                <div class="group-global">
-                                    <span class="group-label">GLOBAL:</span>
-                                    <button id="btn_sel_todas" class="btn btn-outline btn-sm">☑ Marcar Tudo</button>
-                                    <button id="btn_des_todas" class="btn btn-outline btn-sm">☐ Desmarcar Tudo</button>
-                                </div>
-                                <div class="group-filtered">
-                                    <span class="group-label">NO FILTRO ATUAL:</span>
-                                    <button id="btn_sel_filtro" class="btn btn-outline btn-sm btn-filter-sel">☑ Selecionar Visíveis</button>
-                                    <button id="btn_des_filtro" class="btn btn-outline btn-sm btn-filter-des">☐ Desmarcar Visíveis</button>
+                                <div class="actions-row gap-4">
+                                    <button id="btn_iniciar" class="btn btn-success flex-1 text-lg" disabled>▶ INICIAR ROBÔ</button>
+                                    <button id="btn_parar" class="btn btn-danger flex-1 text-lg" disabled>⏹ PARAR</button>
                                 </div>
                             </div>
 
