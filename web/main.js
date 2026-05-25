@@ -391,3 +391,58 @@ window.onload = async () => {
         }
     }
 };
+
+// =============================================
+// AUTO-UPDATER (Python -> JS callbacks)
+// =============================================
+
+eel.expose(notificar_update);
+function notificar_update(versao, downloadUrl, notas) {
+    const modal = document.getElementById('modal_update');
+    document.getElementById('modal_update_version').textContent = `Nova versão disponível: ${versao}`;
+    const notesEl = document.getElementById('modal_update_notes');
+    notesEl.textContent = notas || '';
+
+    // Guarda a URL de download no dataset do modal para o botão usar
+    modal.dataset.downloadUrl = downloadUrl;
+    modal.dataset.versao = versao;
+    modal.style.display = 'flex';
+}
+
+eel.expose(progresso_update);
+function progresso_update(percent) {
+    const progressWrap = document.getElementById('update_progress_wrap');
+    const bar = document.getElementById('update_progress_bar');
+    const label = document.getElementById('update_progress_label');
+
+    if (percent === -1) {
+        // Erro no download
+        progressWrap.style.display = 'none';
+        document.getElementById('modal_update_actions').style.display = 'flex';
+        alert('Erro ao baixar a atualização. Tente novamente mais tarde.');
+        return;
+    }
+
+    progressWrap.style.display = 'block';
+    bar.style.width = percent + '%';
+    label.textContent = percent < 100 ? `Baixando... ${percent}%` : '✅ Concluído! O app será reiniciado...';
+}
+
+// Botão "Atualizar Agora"
+document.getElementById('btn_update_agora').addEventListener('click', async () => {
+    // Oculta botões e mostra barra de progresso
+    document.getElementById('modal_update_actions').style.display = 'none';
+    document.getElementById('update_progress_wrap').style.display = 'block';
+
+    // Chama o Python para iniciar o download
+    await eel.verificar_update_disponivel()();
+    // O download é iniciado pelo Python quando ele chama de volta iniciar_download_update
+    // Aqui pedimos diretamente:
+    const modal = document.getElementById('modal_update');
+    await eel.iniciar_download_update(modal.dataset.downloadUrl || '')();
+});
+
+// Botão "Depois"
+document.getElementById('btn_update_depois').addEventListener('click', () => {
+    document.getElementById('modal_update').style.display = 'none';
+});

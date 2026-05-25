@@ -508,4 +508,87 @@ textarea::-webkit-scrollbar-thumb, .list-container::-webkit-scrollbar-thumb { ba
 .btn-filter-des { color: var(--accent-pink) !important; border-color: rgba(236, 72, 153, 0.3) !important; }
 .btn-filter-des:hover { background: rgba(236, 72, 153, 0.1) !important; border-color: var(--accent-pink) !important; }
 
+/* =============================================
+   MODAL DE ATUALIZAÇÃO AUTOMÁTICA
+   ============================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
 
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 36px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-icon {
+  font-size: 2.5rem;
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0;
+}
+
+.modal-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+.modal-notes {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  max-height: 120px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.modal-notes:empty { display: none; }
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Barra de Progresso */
+.progress-bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-input);
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent-blue);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}

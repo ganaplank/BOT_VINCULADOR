@@ -207,6 +207,29 @@
         </div>
     </div>
 
+    <!-- Modal de Notificação de Atualização -->
+    <div id="modal_update" class="modal-overlay" style="display:none;">
+        <div class="modal-box">
+            <div class="modal-icon">🔄</div>
+            <h2 class="modal-title">Atualização Disponível</h2>
+            <p id="modal_update_version" class="modal-subtitle"></p>
+            <div id="modal_update_notes" class="modal-notes"></div>
+
+            <!-- Barra de progresso (oculta até o download iniciar) -->
+            <div id="update_progress_wrap" style="display:none; margin-top: 16px;">
+                <div class="progress-bar-track">
+                    <div id="update_progress_bar" class="progress-bar-fill"></div>
+                </div>
+                <p id="update_progress_label" class="modal-subtitle" style="margin-top:8px;">Baixando... 0%</p>
+            </div>
+
+            <div id="modal_update_actions" class="modal-actions">
+                <button id="btn_update_agora" class="btn btn-primary flex-1">⬇ Atualizar Agora</button>
+                <button id="btn_update_depois" class="btn btn-outline flex-1">Depois</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Overlay Loading Global -->
     <div id="loading_overlay" class="overlay">
         <div class="spinner"></div>

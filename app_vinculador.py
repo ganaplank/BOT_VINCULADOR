@@ -14,6 +14,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
+import updater
+
+# =============================================
+# VERSÃO DO APLICATIVO
+# =============================================
+CURRENT_VERSION = "v1.0.0"
 
 # Configura o diretório web
 if getattr(sys, 'frozen', False):
@@ -525,5 +531,34 @@ def obter_login_salvo():
             pass
     return None
 
+@eel.expose
+def verificar_update_disponivel():
+    """Verifica se há uma nova versão no GitHub e notifica a UI."""
+    info = updater.verificar_update(CURRENT_VERSION)
+    if info:
+        eel.notificar_update(info["version"], info["download_url"], info["release_notes"])()
+
+@eel.expose
+def iniciar_download_update(download_url):
+    """Inicia o download e aplicação do update em segundo plano."""
+    def _progresso(percent):
+        eel.progresso_update(percent)()
+
+    def _task():
+        ok = updater.baixar_e_aplicar_update(download_url, callback_progresso=_progresso)
+        if not ok:
+            eel.progresso_update(-1)()  # -1 = erro
+
+    threading.Thread(target=_task, daemon=True).start()
+
 if __name__ == "__main__":
+    # Limpa arquivos .old.exe residuais de atualizações anteriores
+    updater.limpar_residuos()
+
+    # Verifica update em background sem bloquear a inicialização
+    threading.Thread(
+        target=verificar_update_disponivel,
+        daemon=True
+    ).start()
+
     eel.start('index.html', size=(950, 800), mode='chrome')
