@@ -249,9 +249,21 @@ class BotBackend:
             EC.frame_to_be_available_and_switch_to_it((By.ID, "conteudoPrincipal"))
         )
 
-    def iniciar_robo(self, condominio, unidades_alvo, vinc_agregadas):
+    def _resolver_condominio(self, unidade_nome: str, mapa_condominios: dict) -> str:
+        """
+        Determina o condomínio correto para uma unidade baseado no seu bloco.
+        Ex: '01/Apart/000052' -> bloco '01' -> mapa['01'] ou mapa['default']
+        """
+        bloco = unidade_nome.split('/')[0] if '/' in unidade_nome else ''
+        return mapa_condominios.get(bloco, mapa_condominios.get('default', ''))
+
+    def iniciar_robo(self, mapa_condominios, unidades_alvo, vinc_agregadas):
         self.executando = True
         self.log(f"Iniciando robô para {len(unidades_alvo)} cadastros...")
+        blocos_usados = set(u.split('/')[0] for u in unidades_alvo if '/' in u)
+        for bloco in sorted(blocos_usados):
+            cond = mapa_condominios.get(bloco, mapa_condominios.get('default', '?'))
+            self.log(f"  Bloco {int(bloco):02d} → Condomínio {cond}")
 
         aba_principal = self.driver.current_window_handle
 
@@ -263,6 +275,8 @@ class BotBackend:
             self.log(f"\n[{i+1}/{len(unidades_alvo)}] Processando: {texto_unidade}")
 
             try:
+                condominio = self._resolver_condominio(texto_unidade, mapa_condominios)
+                self.log(f"   -> Condomínio: {condominio}")
                 # --- PASSO 1: Entra no iframe e acha a linha ---
                 self.driver.switch_to.window(aba_principal)
                 self._entrar_iframe_principal()
@@ -457,8 +471,8 @@ def ler_unidades():
     threading.Thread(target=bot.ler_unidades, daemon=True).start()
 
 @eel.expose
-def iniciar_robo(condominio, unidades_alvo, vinc_agregadas):
-    threading.Thread(target=bot.iniciar_robo, args=(condominio, unidades_alvo, vinc_agregadas), daemon=True).start()
+def iniciar_robo(mapa_condominios, unidades_alvo, vinc_agregadas):
+    threading.Thread(target=bot.iniciar_robo, args=(mapa_condominios, unidades_alvo, vinc_agregadas), daemon=True).start()
 
 @eel.expose
 def parar_robo():

@@ -88,11 +88,23 @@ btnLer.addEventListener('click', async () => {
 });
 
 btnIniciar.addEventListener('click', async () => {
-    const cond = document.getElementById('condominio').value.trim();
-    if (!cond) {
-        alert("Preencha o condomínio!");
+    // Coleta o mapeamento de condomínios por bloco
+    const mapaCondominios = {};
+    const condPadrao = document.getElementById('condominio').value.trim();
+    if (!condPadrao) {
+        alert("Preencha o Condomínio Padrão!");
         return;
     }
+    mapaCondominios['default'] = condPadrao;
+
+    // Lê os campos de condomínio por bloco
+    document.querySelectorAll('.mapa-row').forEach(row => {
+        const bloco = row.dataset.bloco;
+        const val = row.querySelector('input').value.trim();
+        if (bloco && val) {
+            mapaCondominios[bloco] = val;
+        }
+    });
 
     // Coletar selecionados
     const selecionadas = [];
@@ -111,7 +123,7 @@ btnIniciar.addEventListener('click', async () => {
     btnLer.disabled = true;
     btnParar.disabled = false;
 
-    await eel.iniciar_robo(cond, selecionadas, vincAgregadas)();
+    await eel.iniciar_robo(mapaCondominios, selecionadas, vincAgregadas)();
 });
 
 btnParar.addEventListener('click', async () => {
@@ -254,7 +266,7 @@ function atualizar_lista_unidades(unidadesData) {
     btnIniciar.disabled = false;
     setStatus(`✅ ${unidadesData.length} unidades carregadas. Selecione as que deseja vincular.`);
 
-    // Extrai blocos únicos para popular o dropdown
+    // Extrai blocos únicos para popular o dropdown e o mapeamento
     const blocos = new Set();
     unidadesData.forEach(u => {
         const parts = u.nome.split('/');
@@ -269,6 +281,21 @@ function atualizar_lista_unidades(unidadesData) {
         opt.textContent = `Bloco ${parseInt(b, 10)}`;
         selectBloco.appendChild(opt);
     });
+
+    // Popula a tabela de mapeamento de condomínios por bloco
+    const mapaRows = document.getElementById('mapa_rows');
+    mapaRows.innerHTML = '';
+    [...blocos].sort().forEach(b => {
+        const row = document.createElement('div');
+        row.className = 'mapa-row';
+        row.dataset.bloco = b;
+        row.innerHTML = `
+            <span class="mapa-bloco-name">Bloco ${parseInt(b, 10)}</span>
+            <input type="text" placeholder="Ex: 506" title="Condomínio do Bloco ${parseInt(b, 10)}">
+        `;
+        mapaRows.appendChild(row);
+    });
+    document.getElementById('mapeamento_blocos').style.display = 'block';
 
     // Mostra os filtros agora que há dados
     document.getElementById('filtros_container').style.display = 'flex';

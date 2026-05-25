@@ -509,6 +509,70 @@ textarea::-webkit-scrollbar-thumb, .list-container::-webkit-scrollbar-thumb { ba
 .btn-filter-des:hover { background: rgba(236, 72, 153, 0.1) !important; border-color: var(--accent-pink) !important; }
 
 /* =============================================
+   MAPEAMENTO DE CONDOMÍNIOS POR BLOCO
+   ============================================= */
+#mapeamento_blocos {
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.mapa-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg-input);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 12px;
+}
+.mapa-label-col {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.mapa-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 6px 12px;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.mapa-row:last-child { border-bottom: none; }
+
+.mapa-bloco-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mapa-row input[type="text"] {
+  padding: 5px 10px;
+  font-size: 0.875rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  width: 100%;
+}
+.mapa-row input[type="text"]:focus {
+  border-color: var(--accent-blue);
+  outline: none;
+}
+
+.mapa-hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: 6px 12px 8px;
+  background: var(--bg-input);
+  border-top: 1px solid var(--border);
+}
+
+
+/* =============================================
    MODAL DE ATUALIZAÇÃO AUTOMÁTICA
    ============================================= */
 .modal-overlay {

@@ -64,9 +64,20 @@
                                 <input type="password" id="senha" placeholder="••••••••">
                             </div>
                             <div class="input-group mb-4">
-                                <label>Condomínio</label>
-                                <input type="text" id="condominio" placeholder="Ex: 123">
+                                <label>Condomínio Padrão</label>
+                                <input type="text" id="condominio" placeholder="Ex: 505">
                             </div>
+
+                            <!-- Mapeamento por Bloco (aparece após ler unidades) -->
+                            <div id="mapeamento_blocos" style="display:none;">
+                                <div class="mapa-header">
+                                    <span class="mapa-label-col">Bloco</span>
+                                    <span class="mapa-label-col">Condomínio</span>
+                                </div>
+                                <div id="mapa_rows"></div>
+                                <p class="mapa-hint">Deixe em branco para usar o Condomínio Padrão.</p>
+                            </div>
+
                             
                             <div class="d-flex gap-4 mb-4">
                                 <label class="checkbox-wrapper">
