@@ -48,9 +48,9 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e comitar no GitHub
 
 - `[ ]` Corrigir quebra/overflow da interface pós-login (ações rápidas e botões ocultados):
-  - `[ ]` Ajustar estilos de flexbox para `.main-operational-layout` e `.checklist-area` com `min-height: 0`
-  - `[ ]` Mudar `.list-container` de altura fixa de 200px para `flex: 1` e `min-height: 0`
-  - `[ ]` Limitar altura de `#mapeamento_blocos` com `max-height: 100%` e scroll vertical
+  - `[x]` Ajustar estilos de flexbox para `.main-operational-layout` e `.checklist-area` com `min-height: 0`
+  - `[x]` Mudar `.list-container` de altura fixa de 200px para `flex: 1` e `min-height: 0`
+  - `[x]` Limitar altura de `#mapeamento_blocos` com `max-height: 100%` e scroll vertical
   - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 
