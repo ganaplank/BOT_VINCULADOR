@@ -321,9 +321,9 @@ class BotBackend:
                 link_edicao = botao_lapis.get_attribute("href")
 
                 # --- PASSO 3: Abre a página de edição do usuário em nova aba ---
-                self.driver.execute_script(f"window.open('{link_edicao}', '_blank');")
+                self.driver.switch_to.new_window('tab')
+                self.driver.get(link_edicao)
                 time.sleep(1.5)
-                self.driver.switch_to.window(self.driver.window_handles[-1])
 
                 # --- PASSO 4: Processa o vínculo da unidade principal ---
                 sucesso = self._processar_unidade(texto_unidade, condominio)
@@ -352,9 +352,9 @@ class BotBackend:
                             By.XPATH, ".//a[img[@alt='Editar Cadastro']]"
                         )
                         link_agr = btn_agr.get_attribute("href")
-                        self.driver.execute_script(f"window.open('{link_agr}', '_blank');")
+                        self.driver.switch_to.new_window('tab')
+                        self.driver.get(link_agr)
                         time.sleep(1.5)
-                        self.driver.switch_to.window(self.driver.window_handles[-1])
                         suc_agr = self._processar_unidade(agr, condominio)
                         if suc_agr:
                             self._salvar_no_historico(agr)

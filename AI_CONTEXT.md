@@ -65,5 +65,9 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 - `[x]` Reduzir altura da lista e mapeamento para 300px (aprox. 10 unidades):
-  - `[x]` Ajustar altura fixa de `.list-container` e `#mapeamento_blocos` para 300px no `style.css`
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
+
+- `[ ]` Corrigir abertura de aba e formato das unidades no código de leitura:
+  - `[x]` Ajustar regex de unidades para aceitar blocos com 1 dígito (\d+) em `app_vinculador.py`
+  - `[x]` Alterar abertura de abas de execute_script(window.open) para driver.switch_to.new_window('tab')
+  - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) (Apenas após autorização do usuário)
