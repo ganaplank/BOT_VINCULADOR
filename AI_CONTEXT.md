@@ -53,10 +53,10 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
   - `[x]` Limitar altura de `#mapeamento_blocos` com `max-height: 100%` e scroll vertical
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
-- `[ ]` Mudar layout para rolagem de página natural (estilo website):
+- `[x]` Mudar layout para rolagem de página natural (estilo website):
   - `[x]` Alterar `.app-main` em `style.css` para ter scroll vertical (`overflow-y: auto`)
   - `[x]` Ajustar `web/index.html` removendo a classe `h-100` do card de seleção
   - `[x]` Remover limites de altura de flexbox e permitir que `.list-container` e `#mapeamento_blocos` cresçam naturalmente
-  - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
+  - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 
