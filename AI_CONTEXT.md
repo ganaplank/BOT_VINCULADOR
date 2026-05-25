@@ -47,10 +47,10 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
   - `[x]` Criar e expor `finalizar_sessao` no `app_vinculador.py` para fechar o Selenium
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e comitar no GitHub
 
-- `[ ]` Corrigir quebra/overflow da interface pós-login (ações rápidas e botões ocultados):
+- `[x]` Corrigir quebra/overflow da interface pós-login (ações rápidas e botões ocultados):
   - `[x]` Ajustar estilos de flexbox para `.main-operational-layout` e `.checklist-area` com `min-height: 0`
   - `[x]` Mudar `.list-container` de altura fixa de 200px para `flex: 1` e `min-height: 0`
   - `[x]` Limitar altura de `#mapeamento_blocos` com `max-height: 100%` e scroll vertical
-  - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
+  - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 
