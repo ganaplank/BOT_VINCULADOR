@@ -59,9 +59,9 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
   - `[x]` Remover limites de altura de flexbox e permitir que `.list-container` e `#mapeamento_blocos` cresçam naturalmente
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
-- `[ ]` Limitar altura da lista de unidades e mapeamento de blocos para evitar rolagem infinita:
+- `[x]` Limitar altura da lista de unidades e mapeamento de blocos para evitar rolagem infinita:
   - `[x]` Definir altura fixa confortável de 450px para `.list-container` e `#mapeamento_blocos` com rolagem interna (`overflow-y: auto`)
   - `[x]` Garantir que os botões de controle inferiores fiquem logo abaixo dessa altura sem exigir rolagem excessiva
-  - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
+  - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 
