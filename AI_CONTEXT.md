@@ -65,7 +65,7 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
   - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 - `[ ]` Reduzir altura da lista e mapeamento para 300px (aprox. 10 unidades):
-  - `[ ]` Ajustar altura fixa de `.list-container` e `#mapeamento_blocos` para 300px no `style.css`
+  - `[x]` Ajustar altura fixa de `.list-container` e `#mapeamento_blocos` para 300px no `style.css`
   - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar no GitHub
 
 
