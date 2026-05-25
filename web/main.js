@@ -168,6 +168,40 @@ if (btnToggleSidebar) {
     });
 }
 
+// Finalizar Sessão Atual
+const btnFinalizarSessao = document.getElementById('btn_finalizar_sessao');
+if (btnFinalizarSessao) {
+    btnFinalizarSessao.addEventListener('click', async () => {
+        showLoading("Finalizando sessão e fechando Chrome...");
+        await eel.finalizar_sessao()();
+        
+        // Reseta estado do layout
+        document.querySelector('.app-container').classList.remove('session-active');
+        document.getElementById('session_bar').style.display = 'none';
+        document.getElementById('controles_operacao').style.display = 'none';
+        
+        // Limpa lista de unidades e mapeamento
+        document.getElementById('lista_unidades').innerHTML = `
+            <div class="empty-state">
+                <h2>Nenhum dado carregado.</h2>
+                <p>Abra o sistema e faça login para carregar as unidades e controles.</p>
+            </div>
+        `;
+        document.getElementById('mapeamento_blocos').style.display = 'none';
+        document.getElementById('mapa_rows').innerHTML = '';
+        document.getElementById('filtros_container').style.display = 'none';
+        
+        // Reseta filtros
+        document.getElementById('filtro_bloco').value = '';
+        document.getElementById('filtro_de').value = '';
+        document.getElementById('filtro_ate').value = '';
+        buscaInput.value = '';
+        
+        setStatus('');
+        hideLoading();
+    });
+}
+
 // =============================================
 // FILTROS
 // =============================================
@@ -253,6 +287,12 @@ function log_message(msg) {
 
 eel.expose(habilitar_leitura);
 function habilitar_leitura() {
+    const user = document.getElementById('usuario').value.trim();
+    const pwd = document.getElementById('senha').value.trim();
+    document.getElementById('session_info').textContent = `${user} / ${pwd}`;
+    document.getElementById('session_bar').style.display = 'flex';
+    document.querySelector('.app-container').classList.add('session-active');
+    document.getElementById('controles_operacao').style.display = 'block';
     btnLer.disabled = false;
 }
 
