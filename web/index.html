@@ -63,9 +63,11 @@
                                 <label>Senha</label>
                                 <input type="password" id="senha" placeholder="••••••••">
                             </div>
-                            <div class="input-group mb-4">
-                                <label>Condomínio Padrão</label>
-                                <input type="text" id="condominio" placeholder="Ex: 505">
+
+                            <!-- Instrução de Uso -->
+                            <div class="info-tip mb-4">
+                                <span class="info-tip-icon">ℹ️</span>
+                                <p>Após logar, abra a tela de usuários do <strong>condomínio mãe (geral)</strong>. Clique em <strong>"Ler Unidades"</strong> para o robô detectar todos os blocos — depois preencha a tabela abaixo com o condomínio de cada bloco.</p>
                             </div>
 
                             <!-- Mapeamento por Bloco (aparece após ler unidades) -->
@@ -75,20 +77,14 @@
                                     <span class="mapa-label-col">Condomínio</span>
                                 </div>
                                 <div id="mapa_rows"></div>
-                                <p class="mapa-hint">Deixe em branco para usar o Condomínio Padrão.</p>
+                                <p class="mapa-hint">⚠️ Preencha o condomínio de cada bloco antes de iniciar o robô.</p>
                             </div>
 
-                            
                             <div class="d-flex gap-4 mb-4">
                                 <label class="checkbox-wrapper">
                                     <input type="checkbox" id="lembrar_login" checked>
                                     <span class="checkmark"></span>
                                     Salvar Login
-                                </label>
-                                <label class="checkbox-wrapper">
-                                    <input type="checkbox" id="lembrar_condominio">
-                                    <span class="checkmark"></span>
-                                    Salvar Condomínio
                                 </label>
                             </div>
 

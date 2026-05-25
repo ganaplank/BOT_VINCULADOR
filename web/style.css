@@ -508,6 +508,21 @@ textarea::-webkit-scrollbar-thumb, .list-container::-webkit-scrollbar-thumb { ba
 .btn-filter-des { color: var(--accent-pink) !important; border-color: rgba(236, 72, 153, 0.3) !important; }
 .btn-filter-des:hover { background: rgba(236, 72, 153, 0.1) !important; border-color: var(--accent-pink) !important; }
 
+/* Info Tip (Instrução de uso) */
+.info-tip {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-blue);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.info-tip-icon { font-size: 1.1rem; flex-shrink: 0; line-height: 1.5; }
+.info-tip p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+.info-tip strong { color: var(--text-primary); }
+
 /* =============================================
    MAPEAMENTO DE CONDOMÍNIOS POR BLOCO
    ============================================= */

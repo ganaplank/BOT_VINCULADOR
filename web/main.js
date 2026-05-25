@@ -55,7 +55,6 @@ function setStatus(msg) {
 btnAbrir.addEventListener('click', async () => {
     const user = document.getElementById('usuario').value.trim();
     const pwd = document.getElementById('senha').value.trim();
-    const cond = document.getElementById('condominio').value.trim();
 
     if (!user || !pwd) {
         alert("Por favor, preencha Usuário e Senha!");
@@ -65,13 +64,12 @@ btnAbrir.addEventListener('click', async () => {
     btnAbrir.disabled = true;
     showLoading("Iniciando Chrome e logando...");
     
-    // Salvar ou limpar login localmente
+    // Salva login localmente
     const lembrarLogin = document.getElementById('lembrar_login').checked;
-    const lembrarCond = document.getElementById('lembrar_condominio').checked;
-    await eel.salvar_login(user, pwd, cond, lembrarLogin, lembrarCond)();
+    await eel.salvar_login(user, pwd, '', lembrarLogin, false)();
 
     // Call Python
-    await eel.abrir_sistema(user, pwd, cond)();
+    await eel.abrir_sistema(user, pwd, '')();
     
     hideLoading();
     btnAbrir.disabled = false;
@@ -90,21 +88,28 @@ btnLer.addEventListener('click', async () => {
 btnIniciar.addEventListener('click', async () => {
     // Coleta o mapeamento de condomínios por bloco
     const mapaCondominios = {};
-    const condPadrao = document.getElementById('condominio').value.trim();
-    if (!condPadrao) {
-        alert("Preencha o Condomínio Padrão!");
-        return;
-    }
-    mapaCondominios['default'] = condPadrao;
+    let algumVazio = false;
 
-    // Lê os campos de condomínio por bloco
     document.querySelectorAll('.mapa-row').forEach(row => {
         const bloco = row.dataset.bloco;
         const val = row.querySelector('input').value.trim();
-        if (bloco && val) {
-            mapaCondominios[bloco] = val;
+        if (bloco) {
+            if (!val) {
+                algumVazio = true;
+            } else {
+                mapaCondominios[bloco] = val;
+            }
         }
     });
+
+    if (algumVazio) {
+        alert("Preencha o condomínio de todos os blocos antes de iniciar o robô!");
+        return;
+    }
+    if (Object.keys(mapaCondominios).length === 0) {
+        alert("Primeiro leia as unidades para o robô detectar os blocos!");
+        return;
+    }
 
     // Coletar selecionados
     const selecionadas = [];
@@ -408,13 +413,6 @@ window.onload = async () => {
             document.getElementById('lembrar_login').checked = true;
         } else {
             document.getElementById('lembrar_login').checked = false;
-        }
-        
-        if (loginData.condominio) {
-            document.getElementById('condominio').value = loginData.condominio;
-            document.getElementById('lembrar_condominio').checked = true;
-        } else {
-            document.getElementById('lembrar_condominio').checked = false;
         }
     }
 };
