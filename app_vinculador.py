@@ -189,10 +189,10 @@ class BotBackend:
             )
             self.log(f"  [OK] {len(linhas)} linhas de tabela encontradas")
 
-            # Padrão de código de unidade: NN/TIPO/NNNNNN
-            # Exemplos: 01/Apart/000052, 01/Sala/000001, 02/Loja/000005
+            # Padrão de código de unidade: N/TIPO/N (ou NN/TIPO/NNNNNN)
+            # Exemplos: 1/Apart/01, 01/Apart/000052, 01/Sala/000001, 02/Loja/000005
             # Funciona para qualquer condomínio independente do tipo de unidade
-            RE_UNIDADE = re.compile(r'\d{2}/\w+/\d+')
+            RE_UNIDADE = re.compile(r'\d+/\w+/\d+')
 
             for linha in linhas:
                 try:
