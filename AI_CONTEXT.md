@@ -19,24 +19,12 @@ O projeto passou recentemente por uma grande refatoração estrutural e estétic
 - Comunicação bidirecional Eel implementada e funcionando (logs e updates em tempo real do Python para o JS).
 - Filtros por Nome/Número, Bloco e Faixa Numérica 100% funcionais na interface.
 - Geração e salvamento de Prints (Comprovantes de vínculo) no diretório local.
-- Build automatizado via PyInstaller (`app_vinculador.spec`).
+- **Sistema de Auto-Update (Atualizador Automático) via GitHub Releases** integrado e 100% funcional. Ao iniciar, o app consulta o GitHub Releases em background e oferece atualização via modal na UI com barra de progresso.
+- **Mapeamento de Condomínio por Bloco (Multi-Condo)**: O campo centralizado de condomínio foi removido. Ao ler as unidades, os blocos são identificados e mapeados para os respectivos condomínios diretamente na interface pelo usuário. O robô aplica o ID correto durante o processamento de cada bloco.
+- Build compilado com sucesso via PyInstaller (`app_vinculador.spec`).
 - Subida concluída para repositório GitHub (`https://github.com/ganaplank/BOT_VINCULADOR`).
 
-## 4. Próximo Passo (Imediato)
-A próxima tarefa que o usuário deseja implementar é o **Sistema de Auto-Update (Atualizador Automático)** via GitHub Releases.
-
-### Detalhes da Implementação Pendente (Auto-Updater):
-1. **Verificação de Versão:** Ao iniciar, o backend Python deve bater na API do GitHub (`api.github.com/repos/ganaplank/BOT_VINCULADOR/releases/latest`) de forma assíncrona.
-2. **Notificação (Eel):** Se a versão no GitHub for maior que a constante local (ex: `CURRENT_VERSION = 'v1.0.0'`), enviar evento para o frontend exibir um modal corporativo na UI.
-3. **Download:** Se o usuário aceitar, o Python faz o download do binário de Lançamento (Asset `.exe`) da release respectiva usando a biblioteca `requests` ou nativa. Mostrar tela de *Loading* de progresso na UI.
-4. **Substituição e Restart:** 
-   - O aplicativo atual usa `os.rename()` para renomear o `.exe` em execução para algo como `BotVinculadorPRO.old.exe`.
-   - O novo arquivo assume o nome padrão `BotVinculadorPRO.exe`.
-   - Lança um subprocesso com o novo executável e chama `sys.exit()` no antigo.
-   - *Nota de Boot:* O `app_vinculador.py` deverá possuir uma verificação logo no início da execução que busque e delete (via `os.remove`) qualquer arquivo `*.old.exe` esquecido na pasta, limpando o rastro da atualização anterior.
-
 ---
-**[Instrução para a IA de Casa]:** O usuário deseja começar imediatamente a implementar o sistema de Auto-Update descrito no passo 4. Verifique a estrutura atual nos arquivos `main.js`, `app_vinculador.py` e crie as funções necessárias.
 
 ## 5. Tarefas Secundárias Futuras (Aviso de Antivírus)
 O usuário relatou que o executável gerado pelo PyInstaller está disparando avisos de falso positivo no Windows Defender ("vírus"). 
