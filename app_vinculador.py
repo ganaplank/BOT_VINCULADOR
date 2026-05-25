@@ -242,6 +242,21 @@ class BotBackend:
             self.log(f"Erro ao ler unidades: {e}")
 
 
+    def finalizar_sessao(self):
+        self.log("[BOT] Finalizando sessão...")
+        self.executando = False
+        self.todas_unidades = []
+        self.todas_agregadas = {}
+        if self.driver:
+            try:
+                self.driver.quit()
+                self.log("[BOT] Chrome encerrado com sucesso.")
+            except Exception as e:
+                self.log(f"[BOT] Erro ao fechar Chrome: {e}")
+            self.driver = None
+        self.log("[BOT] Sessão limpa e pronta para nova leitura.")
+
+
     def _entrar_iframe_principal(self):
         """Garante que o driver está dentro do iframe conteudoPrincipal."""
         self.driver.switch_to.default_content()
@@ -483,6 +498,10 @@ def parar_robo():
     if bot.executando:
         bot.executando = False
         bot.log("[BOT] Parada solicitada...")
+
+@eel.expose
+def finalizar_sessao():
+    bot.finalizar_sessao()
 
 @eel.expose
 def obter_ultimo_erro():
