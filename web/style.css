@@ -157,7 +157,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
   background: var(--bg-base);
 }
@@ -210,16 +210,16 @@ body {
 .main-operational-layout {
   display: flex;
   gap: 24px;
-  flex: 1;
-  min-height: 0;
+  height: auto;
 }
 .checklist-area {
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  height: auto;
+  flex: 1;
 }
 
-.tab-content { display: none; padding: 24px; flex: 1; overflow: hidden; }
+.tab-content { display: none; padding: 24px; flex: 1; height: auto; overflow: visible; }
 .tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -227,29 +227,23 @@ body {
 .dashboard-grid {
   display: flex;
   gap: 24px;
-  height: 100%;
+  height: auto;
 }
 .col-controls {
   width: 380px;
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  overflow-y: auto;
-  padding-right: 8px;
   gap: 24px;
+  height: auto;
 }
-.col-controls::-webkit-scrollbar { width: 4px; }
-.col-controls::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
 
 .col-data {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
-  min-height: 0;
-}
-.card.h-100 {
-  min-height: 0;
+  height: auto;
 }
 
 /* SELECTION ACTIONS (Rodapé da lista) */
@@ -364,7 +358,7 @@ input[type="text"]:focus, input[type="password"]:focus { border-color: var(--acc
 /* Lists & Checkboxes */
 .list-container {
   background: var(--bg-input); border: 1px solid var(--border);
-  border-radius: var(--radius-sm); flex: 1; min-height: 0; overflow-y: auto;
+  border-radius: var(--radius-sm); height: auto; min-height: 350px;
   padding: 12px; display: flex; flex-direction: column; gap: 6px;
 }
 .empty-state { color: var(--text-muted); font-size: 0.9rem; text-align: center; margin: auto; }
@@ -578,8 +572,7 @@ textarea::-webkit-scrollbar-thumb, .list-container::-webkit-scrollbar-thumb { ba
   flex-shrink: 0;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  overflow-y: auto;
-  max-height: 100%;
+  height: auto;
 }
 
 .mapa-header {
