@@ -176,6 +176,42 @@ body {
   color: var(--text-primary);
 }
 
+/* Session Bar inside Header */
+.session-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  background: rgba(37, 99, 235, 0.1);
+  border: 1px solid rgba(37, 99, 235, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+}
+.session-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+.session-bar .btn-danger {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+/* Session Active Transition */
+.session-active #login_column {
+  display: none !important;
+}
+.session-active #data_column {
+  width: 100% !important;
+  flex: 1 !important;
+}
+
+/* Layout Principal Operacional (Lado a Lado) */
+.main-operational-layout {
+  display: flex;
+  gap: 24px;
+}
+
 .tab-content { display: none; padding: 24px; flex: 1; overflow: hidden; }
 .tab-content.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -527,10 +563,12 @@ textarea::-webkit-scrollbar-thumb, .list-container::-webkit-scrollbar-thumb { ba
    MAPEAMENTO DE CONDOMÍNIOS POR BLOCO
    ============================================= */
 #mapeamento_blocos {
-  margin-bottom: 16px;
+  width: 300px;
+  flex-shrink: 0;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   overflow: hidden;
+  height: fit-content;
 }
 
 .mapa-header {

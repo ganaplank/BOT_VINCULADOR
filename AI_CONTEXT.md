@@ -42,7 +42,7 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
 
 - `[ ]` Implementar "Finalizar sessão atual" e Reestruturação de Layout:
   - `[x]` Adicionar `#session_bar` e reposicionar contêineres em `index.html`
-  - `[ ]` Adicionar estilos de transição CSS para a classe `.session-active` e layout flexível em `style.css`
+  - `[x]` Adicionar estilos de transição CSS para a classe `.session-active` e layout flexível em `style.css`
   - `[ ]` Implementar callbacks de login/logout, botão de finalizar sessão e manipulação de classes no `main.js`
   - `[x]` Criar e expor `finalizar_sessao` no `app_vinculador.py` para fechar o Selenium
   - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e comitar no GitHub
