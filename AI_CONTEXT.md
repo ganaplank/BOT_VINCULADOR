@@ -35,8 +35,8 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
 *(Esta seção é atualizada em tempo real conforme novas tarefas são solicitadas e concluídas. Em caso de queda da IA, a próxima deve continuar a partir do primeiro item em aberto `[ ]`)*
 
 - `[ ]` Investigar e corrigir botões sem resposta (Abrir Sistema, Ver Log, etc.):
-  - `[ ]` Comparar `index.html` e `main.js` atuais com o backup `BACKUP_20260525_0948` (ou anterior)
-  - `[ ]` Identificar elementos ID quebrados ou listeners desvinculados no JavaScript
-  - `[ ]` Corrigir `index.html` e `main.js` para restabelecer a funcionalidade original
+  - `[x]` Comparar `index.html` e `main.js` atuais com o backup `BACKUP_20260525_0948` (ou anterior)
+  - `[x]` Identificar elementos ID quebrados ou listeners desvinculados no JavaScript
+  - `[x]` Corrigir `index.html` e `main.js` para restabelecer a funcionalidade original
   - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar
 

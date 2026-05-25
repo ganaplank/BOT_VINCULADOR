@@ -143,10 +143,13 @@ btnCopiar.addEventListener('click', async () => {
 });
 
 // Enter key to login
-['usuario', 'senha', 'condominio'].forEach(id => {
-    document.getElementById(id).addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') btnAbrir.click();
-    });
+['usuario', 'senha'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') btnAbrir.click();
+        });
+    }
 });
 
 // Sidebar Toggle
