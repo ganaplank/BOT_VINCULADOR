@@ -34,9 +34,9 @@ O usuário relatou que o executável gerado pelo PyInstaller está disparando av
 ## 6. Lista de Tarefas Ativas (Checklist)
 *(Esta seção é atualizada em tempo real conforme novas tarefas são solicitadas e concluídas. Em caso de queda da IA, a próxima deve continuar a partir do primeiro item em aberto `[ ]`)*
 
-- `[ ]` Investigar e corrigir botões sem resposta (Abrir Sistema, Ver Log, etc.):
+- `[x]` Investigar e corrigir botões sem resposta (Abrir Sistema, Ver Log, etc.):
   - `[x]` Comparar `index.html` e `main.js` atuais com o backup `BACKUP_20260525_0948` (ou anterior)
   - `[x]` Identificar elementos ID quebrados ou listeners desvinculados no JavaScript
   - `[x]` Corrigir `index.html` e `main.js` para restabelecer a funcionalidade original
-  - `[ ]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar
+  - `[x]` Compilar novo executável (`BotVinculadorPRO.exe`) e testar/comitar
 
