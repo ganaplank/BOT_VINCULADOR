@@ -1,0 +1,1978 @@
+<script type="text/javascript" src="../../scripts/jquery-painel.js"></script>
+<script src='/js/jquery.3.3.1.js'></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('select[class="selecao-condominio"] option[value="/bin/gerenciamento/dpPainelWM.asp"]').prop('selected', true);
+        $(".link-gominio").addClass("ativo");
+    });
+
+    function validarConteudo() {
+        if (document.getElementById('go').value == "usuarios" || document.getElementById('go').value == "menu" || document.getElementById('go').value == "cadastro" || document.getElementById('go').value == "paramcond") {
+            document.getElementById("divSubURL").style.display = "block";
+            document.getElementById("divSubForm").style.display = "none";
+        }
+        else {
+            document.getElementById("divSubURL").style.display = "none";
+            document.getElementById("divSubForm").style.display = "block";
+        }
+    }
+
+    function TrocarConteudo(urlDestino) {
+
+        document.getElementsByClassName('slide-out-div').display = 'none';
+        document.getElementById('conteudoPrincipal').src = urlDestino;
+        document.getElementById('container-interno01').style.display = 'none';
+        document.getElementById('conteudoPrincipal').style.display = 'block';
+        document.getElementById('carregando').style.display = 'block';
+    }
+
+    function fechaCarregando() {
+        document.getElementById('carregando').style.display = 'none';
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+    }
+
+    function resizeIframe(obj) {
+        obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+    }
+
+    function resizeIframeLiberaUsuarios(obj) {
+        var oDoc = obj.document;
+        document.getElementById('conteudoPrincipal').style.height = oDoc.body.scrollHeight + 'px';
+    }
+
+</script>
+
+<html>
+
+<head>
+
+    <title>Webware Painel Webm&iacute;nio</title>
+    <link href="estilo.css" rel="stylesheet" type="text/css">
+    <link href="custom-painel-webware.css" rel='stylesheet' type='text/css'>
+
+    <style type="text/css">
+        .condcod input[type="number"] {
+            width: 146px;
+            padding: 5px;
+            font-size: 15px;
+            background: #fff;
+            margin-bottom: 5px;
+        }
+
+        .condcod select {
+            padding: 5px;
+            background: #fff;
+            margin: 0 0 0 10px;
+        }
+
+        .condcod input[type="submit"] {
+            width: 56px;
+            height: 78px;
+            margin: -87px 0 0 210px;
+            background: #0067DA;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            border: none;
+            text-transform: uppercase;
+        }
+
+        .condcod input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+
+        .divurl {
+            width: 56px;
+            height: 65px;
+            margin: -65px 0 0 210px;
+            background: #0067DA;
+            color: #fff;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            border: none;
+            text-transform: uppercase;
+        }
+
+        .divurl :hover {
+            opacity: 0.8;
+        }
+
+        #google_translate_element,
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-tooltip,
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+
+        .help a {
+            position: absolute;
+            bottom: 10%;
+            right: 22px;
+            border-radius: 10px;
+            font-weight: 100;
+            padding: 12px 24px 12px 48px;
+            background-size: 27px;
+            background-repeat: no-repeat;
+            background-position: 15px;
+            background-color: #339966;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwMi8wMS8xOVE5GMkAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAAFvElEQVRogb2aW2xVRRSGv25KC6JFUbGl0KIioIBPKEgh3lAEBJVGTYz64JPGRKMPhvigLwQkahQDEW+g4g2MlxiNmIgIBmokVkMEEkDBWi5FRKyE0iL8Psw+MGfY57JnD/zJJHNZs9b658yZPbNmKiQREBVAE3ANcDUwAmgAzgH+BdqALcAGoAVYDwRzoCIAmT7AJGAqMAG4BOgPVBXp0w10AjswhL4E1sT13shCpg54GLgPM/pZsRNYArwC7PNR4EPmPOAJ4CHML5CELqAd2Ascser7AbWYgehboO8B4FVgPnAwlWeS0qRmSe1Kxs+S5kmaLKmuiI5I0iBJUyQ9I+mnAvraJM1K41+5gtWSFicYPCrpTUkTUg6Km8ZJWhrrc/GSpF6hyNRK2pBg5F1JV2Qk4aZRkj5MsLVW0oVZyTRK2uYobpM0IzAJN90hqcOxu1nFp29RMgMTiJQ1QoFSg6T1CYTOT0umUtL3jqJ34vozQSSXqiR97PixJi2ZpY6CZWeYhJtcQi+WS+Yup+M3GR2pkzRSZtpEnjqqdOpMuaUUmf6S/rQ67JI0wMN4vaS5krZI6op1dUvaKml+TMxnUPZbvrVJOqsYmQUO+8keRh+QdEDFcTCWS6u72dHzdCEyDZJ6LMH3PIw9VoKEi0c9bHzlDMqJmWMLPW8JdSn9VBib4OzLkm6SNFrSNElvJciMS2lnlKRjVv/ZLpm+kvZZAq97jNjXVv9uSbcVkGtW/rZlrYetT63+2xUvLLnG6VbjcUlXplQ+XPl4vIT8bEd+REp71zv9x0siijfPt1ob6VZgY6qtN0x0tvCLS8gvJH9735TS3hrMwS6H6QAR5kQ43mr4LKVigKFWvg04XEL+ELDVKg9Jae848IVVngiGTBPQaDWsSqkYYLOVby2zj32s/s/Dpu3ncGBEJXAzUBNXdgKbPBR/APQGLqL0FAOoB0Za5W0eNjcCx4BewADgOuLVJIeNHiuLT7KX6G6V2NoXSNWSdsc6jkl6IwLGWGw7PEYoDXoDc4D7rbrlwB4PXd2cDHxEwMhK4FxL4LiPhyUwBJgBDMOsmpdZbX8DT2bQba+IjZWYIFxFBoXFUAOsI3m16gKaMVEcX3Ra+dooVnq60EAykR8xy+nqjPorrXx3BOy2KvplVO7CDcp9AswCxlL+El4MdtxuVyXmGzEsrqjFTLmgAWgLj5BtWtmIMMFEMP5uijAB7KNxZT0wMJCxJNSUFikbdRh/wfjfEmG+pLlVoQ/5S3VohFxoRnNyF3EQWBVh/oz2pu3GgAajEuUssP38FWiNMN+WFqthRkCDHUBPnO8h7Ed5ppVfB5zYGkx2zgdjA25dJskEyCcF1Nnk+HutrMNZlaQ9VuPbAQ3nDm8h9a2wfP1dcXDSFphrCfRIujSA0WGSdsQ6d8TlrDovV34M4Klcmy00WGYHm8NHAQw/p3w8G0DnSktfp6QLcm326tIOLLLKs4BpGf+kbSXKaXE3MMUqLwD2nyg5rGsk7bWY71GRqHsZqUrSIkm/SFoYl3111Un6y/Jtl6SzbZmkTm7UcHWAqZE1VUv6wfHrlDuiQp2XOB19opsh0+eOPwuT5Ap1rpTU4ih4X2XeLQZMhe5nKtKQQYVvzurPEJGhCQO6SR43Z7nUmEBot6SZp5nIPcq/vpAy3mnmUp2Sb5uXy1wihSQxRub75uJbBbhtzqVqmWC6ix6ZK8PxGQhEMjcFK5T/Zc/hBZV545bW8J0y63sSWiXNkXSDpNqEb5jt/CBJU2V2BFsK6Nsp6fY0/vm8nRkAzAYexDy9SsJhzI6iI84fAapj+UGYU2KfAn0PYQLr88iPvpRElldNgzGvmu6N81mxE1gGvAb84aMgxHuzvpj3ZtMw780uxpz1C703E+ag9g/wG+ZgtRJYy8mDnBdCkLHRC3OrMAG4ChiFCZD0x0yZdmA78B3mdNuSrMYP/wMfxY0uFexVcAAAAABJRU5ErkJggg==');
+            color: #fff;
+            font-size: 18px;
+            display: block;
+            -webkit-box-shadow: 5px 6px 41px -10px rgba(94, 89, 94, 1);
+            -moz-box-shadow: 5px 6px 41px -10px rgba(94, 89, 94, 1);
+            box-shadow: 5px 6px 41px -10px rgba(94, 89, 94, 1);
+        }
+
+        .help a:hover {
+            opacity: 0.8;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css" href="/bin/css/loading.css">
+
+</head>
+
+<body onload=" TrocarConteudo('/bin/gerenciamento/dpPainelWMInterno.asp');">
+    <div class="loading" id="loading-pai" style="display: none;">
+        <div class="loader"></div>
+    </div>
+    <style>
+        .item-recurso ul {
+            float: left;
+        }
+
+
+        .item-recurso ul li {
+            list-style-type: circle;
+            float: left;
+            margin-bottom: 22px;
+        }
+
+
+        .menu-produtos a {
+            padding: 7px 5px 7px 5px !important;
+        }
+
+        .usuario-produtos {
+            font-size: 12px !important;
+        }
+
+        .box-facebook {
+            width: 100%;
+            float: left;
+            height: 450px;
+        }
+    </style>
+
+
+
+
+    <div class="modal fade" id="graficos" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Gráficos Online</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#home">O recurso</a></li>
+                        <li><a data-toggle="tab" href="#menu1">Configurações</a></li>
+                        <li><a data-toggle="tab" href="#menu2">Perguntas frequentes</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane fade in active">
+                            <img src="../../images/img-grafico.png" />
+
+                            <p>A quantidade de informações financeiras dos condomínios podem ser melhor representadas e
+                                compreendidas quando transformadas em gráficos. </p>
+                            <p>Por isso, seu Portal pode proporcionar uma grande facilidade para que os síndicos, membro
+                                do corpo diretivo e até mesmo os condôminos podem compreender melhor todo volume de
+                                informações financeiras de uma forma simples e objetiva. </p>
+
+
+
+                            <div class="item-recurso">
+                                <h3>Como funciona?</h3>
+                                <p>O “Gráficos Online” funciona em tempo real, sem a necessidade da administradora
+                                    publicar arquivo. </p>
+                                <p>Sendo assim, quando a administradora fechar a Prestação de contas do empreendimento,
+                                    o usuário terá acesso para visualizar as informações do mês fechado.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Características</h3>
+                                <p>Recurso disponível somente para administradoras que possuem o Gomínio Online. Caso
+                                    não tenha, entrar em contato com o nosso suporte.</p>
+                            </div>
+
+
+                            <div class="item-recurso-importante">
+                                <h3>Importante</h3>
+                                <p>A ativação do recurso depende da versão do Portal.</p>
+                            </div>
+
+
+                        </div>
+
+                        <div id="menu1" class="tab-pane fade">
+
+                            <div class="item-recurso">
+                                <h3>1 - Habilitar o recurso no Portal</h3>
+                                <p>Acesse o Gomínio – Menu Geral – Gráficos Online.</p>
+                                <p>Habilite a opção e selecione o nível de acesso.</p>
+                                <p>Obs. Caso tenha algum condomínio com o Menu Personalizado, acesse o Gomínio – Informe
+                                    o código do condomínio e selecione a opção "Menu Personalizado".</p>
+                            </div>
+
+                            <div class="item-recurso">
+                                <h3>2 - Habilitar as informações no Condomínio</h3>
+                                <p>Acesse o CondomínioWeb – Financeiro – Previsão orçamentária – Demonstrativo do
+                                    realizado – Parâmetros e marque as opções: "Despesas" e "Incluir percentuais
+                                    comparativos".</p>
+                            </div>
+                        </div>
+
+
+
+                        <div id="menu2" class="tab-pane fade">
+
+
+                            <div class="item-recurso">
+                                <h3>Com o recurso Gráficos Online, preciso continuar publicando os arquivos pela Gosoft?
+                                </h3>
+                                <p>R. Não. Pois, a consulta é em tempo real.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Não está exibindo as informações das despesas. O que faço?</h3>
+                                <p>R. Verifique os parâmetros do Demonstrativo / Realizado no CondomínioWeb. Veja as
+                                    instruções na aba configurações.</p>
+                            </div>
+
+
+
+                            <div class="item-recurso">
+                                <h3>Quando consulto uma conta no Gráfico Geral e exibe a mensagem “Sem informação”. Qual
+                                    motivo?</h3>
+                                <p>R. Isso ocorre quando no mês consultado não existe despesas.</p>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ura" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Atendimento Expresso x URA</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#urahome">O recurso</a></li>
+                        <li><a data-toggle="tab" href="#ura1">Configurações</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="urahome" class="tab-pane fade in active" style="text-align:center;">
+                            <img src="../../images/img-ura.jpg" />
+
+
+                            <div class="item-recurso">
+
+                                <p>De forma gratuita, já é possível que sua empresa disponibilize a segunda via de
+                                    boleto ao condômino pelo telefone por meio de uma integração da sua URA com o
+                                    Atendimento Expresso. <br> <br>
+                                <p> <b>Veja como fuciona:</b>
+                                    <p />
+                            </div>
+
+
+                            <div class="item-recurso" style="text-align:center;">
+                                <img src="../../images/passo-a-passo.jpg" style="width:80%;" />
+                            </div>
+
+
+                            <div class="item-recurso-importante">
+                                <h3><b>OBSERVAÇÕES</b></h3>
+                                <p>A ativação do recurso depende da versão do Portal.</p>
+                            </div>
+
+
+                        </div>
+
+
+                        <div id="ura1" class="tab-pane fade">
+
+
+                            <div class="item-recurso">
+
+                                <p>Para iniciar, é necessário que a empresa de manutenção do PABX crie a opção para
+                                    solicitação e recepcionamento do CPF/CNPJ do condômino.</p>
+
+                                <p>Em seguida, o número do documento deve ser passado pela url:
+                                    <u>https://portalwm.webware.com.br/api/AtendimentoExpresso/GetBoleto?a=&d=CPF_OU_CNPJ</u>
+                                </p>
+
+                                <p>Depois do envio desse documento, o Atendimento Expresso buscará na base do Gomínio os
+                                    usuários com esse número de documento e, caso encontre, enviará um link de acesso ao
+                                    boleto.</p>
+                                <p>
+                                    Com isso iremos retornar <b><i>“true”</i></b> (quando for encontrado um usuário com
+                                    o número de documento informado) ou <b><i>“false”</i></b> (quando não for encontrado
+                                    um usuário com o número de documento informado). No caso desse retorno ser
+                                    <b><i>“false”</i></b>, a recomendação é que a ligação seja direcionada para um
+                                    atendente, que fará um novo cadastro e enviar o boleto pelo Portal.</p>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <div class="modal fade" id="lembrete" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Lembrete de Pagamento Online</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#recursoLembrete">O recurso</a></li>
+                        <li><a data-toggle="tab" href="#configuracaoLembrete">Configurações</a></li>
+                        <li><a data-toggle="tab" href="#perguntasLembrete">Perguntas frequentes</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="recursoLembrete" class="tab-pane fade in active">
+                            <img src="../../images/img-lembrete.png" />
+
+                            <p>Com o recurso “Lembrete de Pagamento Online” sua empresa pode otimizar o trabalho de
+                                cobrança dos recibos do mês através do envio automático de avisos para que o usuário
+                                evite se tornar um inadimplente, prejudicando o caixa do condomínio.</p>
+
+
+
+                            <div class="item-recurso">
+                                <h3>Objetivo</h3>
+                                <p>Entendendo a rotina da administradora no setor de emissão e cobrança das cotas
+                                    condominiais, o recurso "Lembrete de Pagamento Online" ajudará os departamentos a se
+                                    comunicar de forma automatizada com os condôminos de forma eletrônica.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Benefícios</h3>
+
+                                <p>A administradora terá a possibilidade de comunicar os condôminos sobre a cota
+                                    condominial da sua unidade de forma automática e otimizar a rotina do departamento
+                                    de cobrança. Através desse recurso, o condômino será avisado quando uma cota está
+                                    disponível no portal, próxima do vencimento ou até informar que tem cota em atraso.
+                                    Com isso, a administradora aprestará um serviço que lembrará os condôminos que sua
+                                    cota está para vencer e também terá mais uma ferramenta para melhorar o processo de
+                                    cobrança.</p>
+                            </div>
+
+
+
+                            <div class="item-recurso">
+                                <h3>Como funciona?</h3>
+                                <p>O Lembrete de Pagamento Online envia avisos para os moradores do condomínio.</p>
+
+                                <p>Existem 5 tipos de avisos que pode ser utilizado:</p>
+
+                                <ul>
+                                    <li><b>Aviso de emissão</b> – Enviará uma mensagem informando que uma nova cota foi
+                                        emitida com link para obter o boleto;</li>
+                                    <li><b>Aviso de vencimento </b> – Enviará uma mensagem informando que uma cota está
+                                        próxima do vencimento com o link para obter o boleto;</li>
+                                    <li><b>Aviso de vencido </b> – Enviará uma mensagem informando que uma cota está
+                                        vencida com o link para obter o boleto dentro da data limite;</li>
+                                    <li><b>Aviso de pendência </b> – Enviará uma mensagem informando que uma cota está
+                                        próxima da data limite de pagamento com o link para obter o boleto dentro da
+                                        data limite;</li>
+                                    <li><b>Aviso de cobrança </b> – Enviará uma mensagem informando que existe cota (s)
+                                        pendentes com o link para visualizar as pendências.</li>
+                                </ul>
+
+                            </div>
+
+
+                            <div class="item-recurso-importante">
+                                <h3>Importante</h3>
+                                <p>A ativação do recurso depende da versão do Portal.</p>
+                            </div>
+
+
+                        </div>
+
+                        <div id="configuracaoLembrete" class="tab-pane fade">
+
+                            <div class="item-recurso">
+                                <h3><b>1 – Configurar os textos dos avisos:</b></h3>
+                                <p>Acesse o Gomínio -> Lembrete de Pagamento Online -> Configure os avisos de
+                                    recebimento.</p>
+
+                                <p><b>Avisos</b></p>
+                                <ul>
+                                    <li><b>Emissão – </b> Mensagem que poderá ser enviada assim que o rateio for
+                                        processado.</li>
+                                    <li><b>Vencimento – </b> Mensagem que poderá ser enviada antes do vencimento da
+                                        cota.</li>
+                                    <li><b>Vencido – </b> – Mensagem que poderá ser enviada após o vencimento da cota.
+                                    </li>
+                                    <li><b>Pendência – </b> – Mensagem que poderá ser enviada após data limite da cota.
+                                    </li>
+                                    <li><b>Cobrança – </b> – Mensagem que poderá ser enviada depois data limite da cota.
+                                    </li>
+                                </ul>
+
+                                <p>No campo da Mensagem é possível configurar uma mensagem padrão ou personalizar e
+                                    clique em “Gravar”</p>
+
+                                <p>Opção “Chaves” serve para incluir na mensagem e a aplicação no momento do envio do
+                                    aviso enviará com os dados do condômino.</p>
+
+                                <p>Nome – Nome do usuário cadastrado no portal<br /> Unidade – Unidade que o usuário
+                                    está cadastrado no portal<br />Vencimento - Data de vencimento da cota
+                                    condominial<br />Data limite – Data limite de pagamento da cota condominial no
+                                    banco<br />Link – Link de acesso ao portal </p>
+
+
+                            </div>
+
+                            <div class="item-recurso">
+                                <h3>2 – Configurar Remente</h3>
+                                <p>Acesse o Gomínio -> Lembrete de Pagamento Online -> Remetente</p>
+                                <p>Configure o usuário remetente responsável pelo envio e clique em “Salvar”.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>3 – Avisos personalizados</h3>
+                                <p>Caso tenha necessidade de personalizar as informações para um condomínio especifico,
+                                    deve acessar a opção “Configurações / Avisos Personalizados” e seguir os mesmos
+                                    procedimentos de configuração geral.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>4 – Processo de envio dos aviso</h3>
+                                <p>Para que o envio seja automático é necessário ir em Parâmetros-Geral e habilitar a
+                                    opção Habilita o envio automático dos avisos (o processamento é iniciado todos os
+                                    dias aproximadamente as 18h00).</p>
+                                <p>Para enviar manualmente os avisos aos condôminos basta clicar em “Processo manual”.
+                                </p>
+                                <p>A aplicação efetuará a verificação de quais os boletos se enquadra nas configurações
+                                    e enviará o aviso ao condôminos.</p>
+                            </div>
+
+
+
+                        </div>
+
+
+
+                        <div id="perguntasLembrete" class="tab-pane fade">
+
+
+                            <div class="item-recurso">
+                                <h3>Condômino é notificado mais de uma vez pelo mesmo aviso?</h3>
+                                <p>R: Não. Existe uma validação que bloqueia o aviso caso já tenha sido enviado para o
+                                    condômino.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Morador me informou que não recebeu a notificação. O que eu faço?</h3>
+                                <p>R: 1 – Valide se o boleto disponível do portal foi gerado antes das 18 horas, pois os
+                                    avisos são disparados a partir desse horário.<br /> 2 – Valide na lista de usuários
+                                    se o e-mail do condomínio está cadastrado.<br /> 3 – Relatório de Envio: É possível
+                                    consultar os processamentos, avisos enviados e quais unidades foram enviadas.</p>
+                            </div>
+
+
+
+                            <div class="item-recurso">
+                                <h3>Preciso utilizar o “Processo manual” todo dia?</h3>
+                                <p>R: Não. É possível configurar para que seja enviado automático. O passo a passo está
+                                    no item 4 na aba Configurações.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Todos os usuários da unidade recebem os avisos?</h3>
+                                <p>R: Nas configurações do aviso há um campo informando “Enviar para todos os moradores
+                                    da unidade”. Selecionando a opção, será notificado para todos os usuários
+                                    relacionados
+                                    da unidade.
+                                </p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>É possível selecionar períodos de avisos diferentes por condomínio?</h3>
+                                <p>R: Sim, é necessário criar um aviso personalizado. O passo a passo está na aba
+                                    “Configurações”.
+                                </p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Tenho condomínios que não podem ser notificados, o que eu faço?</h3>
+                                <p>R: Para um ou mais condomínios não receberem a notificação, é necessário criar um
+                                    aviso personalizada e ativar a opção “bloqueia o envio de avisos”.</p>
+                            </div>
+
+
+                            <div class="item-recurso">
+                                <h3>Não foi disparado o aviso. O que eu faço?</h3>
+                                <p>R: É necessário validar:<br />
+                                    - Remetente;<br />
+                                    - Boleto disponível para a unidade;<br />
+                                    <b>Obs.:</b> Se possível rodar o envio manualmente no botão: “Processo Manual”.
+                                </p>
+                            </div>
+
+
+
+                            <p>Caso os itens acima não apresente nenhuma irregularidade, por favor entrar em contato com
+                                o suporte. (E-mail: suporte@athos.com.br / Telefone: 11 3274-5299).
+
+                            </p>
+
+
+
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="prestacao" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabelPrestacao">Prestação de Contas Interativa</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+
+                    <div class="tab-content">
+                        <div id="recursoPrestacao" class="tab-pane fade in active">
+                            <img src="../../images/img-prestacao.png" />
+
+
+
+                            <p>Pensando em aprimorar e facilitar ainda mais o dia a dia de sua empresa, atualizamos o
+                                recurso “Prestação de Contas Interativa”.
+                                Com um novo layout mais intuitivo, os síndicos e conselheiros poderão facilmente acessar
+                                as pastas de prestações dos meses lançados e consultar todos os lançamentos do
+                                empreendimento. </p>
+
+                            <p>E agora caso a pasta tenha sido digitalizada e publicado no portal, ficará disponível a
+                                opção para o cliente realizar o download da pasta.
+                            </p>
+
+
+                            <p><b>Características:</b> Recurso disponível somente para administradoras que possuem o
+                                Gomínio Online. Caso não tenha, entrar em contato com o nosso suporte.</p>
+
+
+
+
+
+
+                            <div class="item-recurso-importante">
+                                <h3>Importante</h3>
+                                <p>A ativação do recurso depende da versão do Portal.</p>
+                            </div>
+
+
+                        </div>
+
+                        <div id="configuracaoPrestacao" class="tab-pane fade">
+
+                            <div class="item-recurso">
+                                <h3><b>1 – Configurar os textos dos avisos:</b></h3>
+                                <p>Gomínio -> Menu Geral -> Liberação de Pagamento - Habilite a opção e selecione o
+                                    nível de acesso Síndico. </p>
+
+                                <p>Obs.: Caso tenha algum condomínio com o menu personalizado, acesse:</p>
+                                <p>Gomínio -> Informe o código do Condomínio -> ir para: Menu Personalizado </p>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="modal fade" id="liberacao" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabelLiberacao">Liberação do síndico para pagamento</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#recursoLiberacao">O recurso</a></li>
+                        <li><a data-toggle="tab" href="#configuracaoLiberacao">Configurações</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="recursoLiberacao" class="tab-pane fade in active">
+                            <img src="../../images/img-liberacao.png" />
+
+
+
+                            <p>A quantidade de pagamentos de um condomínio pode ser grande e pagar uma conta sem a
+                                devida aprovação do síndico, pode acarretar problemas no relacionamento da sua empresa
+                                com o cliente.</p>
+
+                            <p>Então, oferecer um recurso prático e online para que o próprio cliente sinalize sua
+                                aprovação para que o pagamento seja realizado, melhora o processo de pagamento e inclui
+                                uma etapa para garantir a qualidade do serviço ao cliente.</p>
+
+
+
+
+
+                            <div class="item-recurso">
+                                <h3>Como funciona?</h3>
+                                <p>A “Liberação de Pagamento” funciona em tempo real, sem a necessidade da
+                                    administradora publicar arquivo. Com isso, o síndico poderá analisar todos os
+                                    pagamentos lançados e aprovar ou recusar. Em seguida, gerente responsável pelo
+                                    condomínio receberá uma notificação via e-mail.</p>
+
+
+                            </div>
+
+
+                            <div class="item-recurso-importante">
+                                <h3>Importante</h3>
+                                <p>O recurso é disponível somente para administradoras que tem o Gomínio Online. Caso
+                                    não tenha, entrar em contato com o nosso suporte. A ativação do recurso depende da
+                                    versão do Portal.</p>
+                            </div>
+
+
+                        </div>
+
+                        <div id="configuracaoLiberacao" class="tab-pane fade">
+
+                            <div class="item-recurso">
+                                <h3><b>1 – Configurar os textos dos avisos:</b></h3>
+                                <p>Gomínio -> Menu Geral -> Liberação de Pagamento - Habilite a opção e selecione o
+                                    nível de acesso Síndico. </p>
+
+                                <p>Obs.: Caso tenha algum condomínio com o menu personalizado, acesse:</p>
+                                <p>Gomínio -> Informe o código do Condomínio -> ir para: Menu Personalizado </p>
+
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <link href="../../css/novidades.css" rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <script src="../../scripts/jquery.tabSlideOut.v1.3.js"></script>
+    <script src='../../scripts/bootstrap.min.js'></script>
+
+    <script>
+        $(window).load(function () {
+
+            $(".slide-out-div").css("display", "block");
+
+            $('.slide-out-div').tabSlideOut({
+                tabHandle: '.handle',                              //class of the element that will be your tab
+                pathToTabImage: 'images/contact_tab.gif',          //path to the image for the tab *required*
+                imageHeight: '122px',                               //height of tab image *required*
+                imageWidth: '40px',                               //width of tab image *required*
+                tabLocation: 'right',                               //side of screen where tab lives, top, right, bottom, or left
+                speed: 800,                                        //speed of animation
+                action: 'click',                                   //options: 'click' or 'hover', action to trigger animation
+                topPos: '50px',                                   //position from the top
+                clickScreenToClose: true,
+                fixedPosition: false,                               //options: true makes it stick(fixed position) on scroll
+                onLoadSlideOut: true
+            });
+        });
+
+    </script>
+
+    <script type="text/javascript" language="JavaScript" nonce="">
+        function Confirma(frm) {
+
+            // Confirma Gravação
+            if (!confirm('Confirma Gravação?')) {
+                return false;
+            }
+
+            return true;
+
+
+        }
+    </script>
+
+    <script type="text/javascript" language="JavaScript" nonce="">
+        function confirmaApagar(frm) {
+
+            // Confirma Gravação
+            if (!confirm('Tem certeza que deseja apagar?')) {
+                return false;
+            }
+
+            return true;
+
+
+        }
+    </script>
+
+    <script type="text/javascript" language="JavaScript" nonce="">
+        function confirmaSair(frm) {
+
+            // Confirma Gravação
+            if (!confirm('Tem certeza que deseja sair?')) {
+                return false;
+            }
+
+            return true;
+
+
+        }
+    </script>
+
+    <script type="text/javascript" language="JavaScript" nonce="">
+        function ConfirmaAvancar(frm) {
+
+            // Confirma Gravação
+            if (!confirm('Confirma Avançar?')) {
+                return false;
+            }
+
+            return true;
+
+
+        }
+    </script>
+
+
+    <style>
+        .menu-produtos {
+            /*padding: 10px 0 10px 0;*/
+        }
+
+        .menu-produtos a {
+            color: #fff;
+            margin: 0 0 0 0px;
+            font-size: 12px;
+        }
+
+        .menu-produtos a:hover {
+            opacity: 0.8;
+        }
+
+        .selecao-condominio {
+            background: #546170;
+            padding: 0px 0 0 10px;
+            height: 40px;
+            float: left;
+            color: #fff;
+            margin: -10px 0 -7px -10px;
+            width: 286px;
+            font-size: 15px;
+        }
+
+        .botoes-produtos {
+            float: right;
+        }
+
+        .btn-red {
+            color: #fff !important;
+            font-size: 12px;
+            margin: 6px 0 0 0;
+            float: left;
+            background: none !important;
+            border: none !important;
+            /*padding: 5px 15px 5px 15px !important;*/
+            background: none !important;
+        }
+
+        .btn-red img {
+            height: 24px;
+            vertical-align: middle;
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .links-topo {
+            width: 60px;
+            float: right;
+            margin: 5px 10px -5px 0;
+            padding-bottom: -5px;
+        }
+
+        .links-topo a {
+            color: #414B56;
+        }
+
+        .links-topo img {
+            margin: 6px 0 -5px 0;
+        }
+
+        .usuario-produtos {
+            float: left;
+            color: #818181;
+            font-size: 13px;
+            text-align: left;
+            margin: 10px 10px 10px 0;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .faleSuporte {
+            font-size: 12px;
+            margin: 0px 0 5px 0;
+            float: left;
+            background: none !important;
+            border: none !important;
+            padding: 5px 15px 5px 15px !important;
+            background: none !important;
+            color: white !important;
+        }
+
+        .faleSuporte img {
+            margin: 10px 0 0 0 !important;
+        }
+
+        .statusAppLnk {
+            font-size: 12px;
+            margin: 0px 0 5px 0;
+            float: left;
+            background: none !important;
+            border: none !important;
+            padding: 5px 5px 5px 15px !important;
+            background: none !important;
+            color: white !important;
+        }
+
+        .statusAppLnk img {
+            margin: 10px 0 0 0 !important;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+
+        #google_translate_element,
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-tooltip,
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .sidenav a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidenav a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 15px;
+                outline: none;
+            }
+
+            .sidenav a {
+                font-size: 5px;
+            }
+        }
+
+        .searchbox {
+            padding: 8px;
+            border-radius: 4px;
+            width: 200px;
+            padding: 8px 0 8px 35px;
+            border: 1px solid #ccc;
+            float: right;
+            border: 1px solid #ccc;
+            margin-right: 2px;
+            font-size: 12px;
+            background-color: white;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            outline: none;
+            padding-left: 30px;
+            display: block;
+        }
+
+        .searchbox:focus-visible {
+            border: 1px solid #000000;
+        }
+
+        .textmenu {
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 5px;
+        }
+
+        #navlateral * {
+            font-size: 15px;
+            background-color: white;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .border {
+            border-right: 1px solid lightgray
+        }
+
+        .statusApp {
+            background-color: #7D8486;
+            border-radius: 7px;
+            background-image: url(/bin/gerenciamento/icones/speedometer.svg);
+            background-position: 12px center;
+            background-size: 19px;
+            background-repeat: no-repeat;
+            outline: none;
+            padding-left: 22px;
+            padding-top: 3px;
+            border: 0px;
+        }
+
+        .falecomathos {
+            background-color: #7D8486;
+            border-radius: 7px;
+            margin: 6px 17px 0 0;
+            min-height: 7px;
+            max-height: 30px;
+            min-width: 160px;
+            max-width: 160px;
+            background-image: url(/bin/gerenciamento/icones/athosicon.png);
+            background-position: 12px center;
+            background-size: 19px;
+            background-repeat: no-repeat;
+            outline: none;
+            padding-left: 22px;
+            padding-top: 3px;
+            border: 0px
+        }
+
+        .painelathos {
+            background-image: url(/bin/gerenciamento/icones/painelicon.png);
+            background-position: 12px center;
+            background-size: 19px;
+            background-repeat: no-repeat;
+        }
+
+        .anno .anno-inner {
+            margin-top: -10px;
+            margin-left: -15px;
+            width: 320px !important;
+        }
+
+        /*.anno .anno-content{
+        padding-top: 29px!important;
+    }*/
+
+        .anno .anno-btn {
+            background: #337AB7 !important;
+            color: #fff !important;
+            border-radius: 3px !important;
+            margin: 10px 9px 10px 6px !important;
+        }
+
+        .anno .anno-btn-x {
+            background: #bdbebd !important;
+            /*padding: 4px 10px!important;*/
+        }
+
+        .anno .anno-btn-low-importance {
+            color: #fff !important;
+        }
+
+        .anno-inner-painel {
+            margin-left: 10px !important;
+        }
+
+        .anno-btn-importance {
+            margin-left: -15px !important;
+        }
+
+        .anno .anno-btn-importance {
+            background: #5CB85C !important;
+        }
+
+        /* saraiva */
+
+        .menuul .menu-pesquisa img {
+            margin-top: 10px;
+            margin-left: 10px;
+            width: 18px;
+            position: absolute;
+        }
+
+        .menuul {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            background-color: #fff;
+            border-bottom: 1px solid #00000033;
+            padding: 10px 20px;
+            max-height: 60px;
+            list-style-type: none;
+            margin: 0;
+            z-index: 1;
+            position: relative;
+        }
+
+        .menuli {
+            margin: 0 15px;
+            position: relative;
+        }
+
+        .menuul.menuul li {
+            border: 0px !important;
+            margin: 0px 6px;
+        }
+
+        .menuli a {
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .menuli a:hover {
+            color: #007bff;
+        }
+
+        .menuli img {
+            max-height: 30px;
+            max-width: 30px;
+            margin-right: 5px;
+        }
+
+        .menu-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            right: 12px;
+        }
+
+        .usuario-produtos {
+            margin: 0;
+            padding: 0;
+            font-weight: bold;
+            color: #555;
+            font-size: 14px !important;
+        }
+
+        .statusApp,
+        .painelathos {
+            background-color: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background-color 0.3s;
+            height: 40px;
+            padding: 0 14px 0 40px;
+        }
+
+        .statusApp:hover,
+        .painelathos:hover {
+            background-color: #0056b3;
+        }
+
+        .menu-icone {
+            transition: 0.5s;
+        }
+
+        .menu-icone:hover {
+            transform: scale(1.5);
+            transition: 0.5s;
+        }
+    </style>
+
+    <div id="navlateral" class="sidenav" style="background-color: white; margin-top: 45px" tabindex="-1">
+        <a style="border-bottom: none; font-size: 20px" href="#" class="closebtn textmenu">&times;</a>
+
+
+
+        <a href="/bin/gerenciamento/dpPainelWM.asp" class="link-gominio">Gomínio</a>
+
+    </div>
+
+    <script type="text/javascript" nonce="">
+
+        //Inicio: SUS1657 | WS | 06/02/2020
+        var isclosed = 0;
+        function navtoggle() {
+            if (isclosed === 1) {
+                isclosed = 0;
+                closeNav();
+            }
+            else {
+                isclosed = 1;
+                openNav();
+            }
+        }
+
+        function closeNav() {
+            document.getElementById("navlateral").style.width = "0";
+        }
+
+        function openNav() {
+            document.getElementById("navlateral").style.width = "250px";
+        }
+
+        //Função chamada no inputchange do procura, validando se não é null ou espaços brancos
+        function searchdiv() {
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+
+            if (filter === null || filter.match(/^ *$/) !== null)
+                closeNav();
+            else {
+                openNav();
+            }
+            atualizarsearch();
+        }
+
+        function atualizarsearch() {
+            var input, filter, ul, li, a, i, txtValue;
+
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            divlateral = document.getElementById("navlateral");
+            itensdiv = divlateral.getElementsByTagName("a");
+
+            for (i = 0; i < itensdiv.length; i++) {
+                itemdiv = itensdiv[i];
+                txtValue = itemdiv.text;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    itensdiv[i].style.display = "";
+                } else {
+                    itensdiv[i].style.display = "none";
+                }
+            }
+        }
+
+        //Click fora do menu fecha o mesmo
+        $(document).mouseup(function (e) {
+
+            var container = $("#navlateral");
+
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                closeNav();
+                input = document.getElementById("searchInput");
+                input.value = "";
+                atualizarsearch();
+            }
+        });
+        //Fim: SUS1657 | WS | 19/02/2020
+
+        function reloadFrame() {
+            document.getElementById('suporteIframe').src = '/bin/gerenciamento/suporte.asp';
+            document.getElementById('suporteIframe').style.height = "300px";
+        }
+
+        function resizeIframe(obj) {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        }
+
+        document.addEventListener("DOMContentLoaded", function (e) {
+            var menuButton = document.querySelector('.menuon');
+            menuButton.onclick = function () {
+                navtoggle();
+            }
+
+            var searchTxt = document.querySelector('#searchInput');
+            searchTxt.oninput = function () {
+                searchdiv();
+            }
+
+            var closebtnButton = document.querySelector('.closebtn');
+            closebtnButton.onclick = function () {
+                closeNav();
+            }
+
+            var editarPerfilButton = document.querySelector('.editarPerfil');
+            editarPerfilButton.onclick = function () {
+                TrocarConteudo('/bin/aplic/usuario.asp');
+            }
+
+            var btnFaleSuporteButton = document.querySelector('.btnFaleSuporte');
+            btnFaleSuporteButton.onclick = function () {
+                alert(this.dataset.idadm);
+                if (this.dataset.idadm == 135) {
+                    TrocarConteudo('/bin/gerenciamento/suporteNET.asp');
+                } else {
+                    TrocarConteudo('/bin/gerenciamento/suporte.asp');
+                }
+            }
+        });
+
+    </script>
+
+    <script type="text/javascript" src="/bin/gerenciamento/modal.js"></script>
+
+    <script src="https://rawgit.com/iamdanfox/anno.js/gh-pages/dist/anno.js" type="text/javascript"></script>
+    <link href="https://rawgit.com/iamdanfox/anno.js/gh-pages/dist/anno.css" rel="stylesheet" type="text/css" />
+
+    <script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <!--Inicio: SUS1657 | WS | 06/02/2020-->
+
+    <script type="text/javascript" language="javascript" nonce="">
+
+        function getCookie(name) {
+            var value = "; " + document.cookie; var parts = value.split("; " + name + "=");
+            if (parts.length == 2)
+                return parts.pop().split(";").shift();
+        }
+
+        var intro = new Anno([
+            {
+                target: '#menu',
+                content: "Oi, tudo bem? Que tal um tour pelo seu painel de trabalho do Portal?  Esse aqui é o menu de recursos.",
+                position: 'right',
+                buttons: [
+                    {
+                        text: 'NÃO MOSTRAR MAIS',
+                        className: 'anno-btn-low-importance',
+                        click: function (anno, evt) {
+                            document.cookie = "nmm=naomostrarmais; expires=Thu, 18 Dec 2025 12:00:00 UTC; path=/";
+
+                            intro.hide();
+                        }
+                    },
+                    {
+                        text: 'AVANÇAR',
+                        click: function (anno, evt) {
+
+                            $('#menu').trigger('click');
+                            anno.switchToChainNext();
+                        }
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    }]
+            },
+            {
+                target: '#navlateral',
+                content: "Nele ficam todos os recursos disponíveis para você e o seu time.",
+                position: 'bottom',
+                buttons: [
+                    {
+                        ...AnnoButton.BackButton,
+                        text: 'VOLTAR'
+                    },
+                    {
+                        text: 'AVANÇAR'
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    }]
+            },
+            {
+                target: '#searchInput',
+                content: "Mas, você também pode encontrar o que precisa digitando o que procura aqui no campo de pesquisa.",
+                position: 'right',
+                buttons: [
+                    {
+                        ...AnnoButton.BackButton,
+                        text: 'VOLTAR'
+                    },
+                    {
+                        text: 'AVANÇAR'
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    }]
+            },
+            {
+                target: '#homeWebware',
+                content: "E se clicar aqui, você volta para a tela inicial do painel.",
+                position: 'bottom',
+                buttons: [
+                    {
+                        ...AnnoButton.BackButton,
+                        text: 'VOLTAR'
+                    },
+                    {
+                        text: 'AVANÇAR'
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    },]
+            },
+            {
+                target: '#usuarioEadm',
+                content: "Aqui mostramos o nome do usuário logado e o da administradora.",
+                position: 'right',
+                buttons: [
+                    {
+                        ...AnnoButton.BackButton,
+                        text: 'VOLTAR'
+                    },
+                    {
+                        text: 'AVANÇAR'
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    },]
+            },
+            {
+                target: '#painel',
+                content: "Clique aqui para voltar ao Painel Principal.",
+                className: 'anno-inner-painel',
+                position: 'left',
+                buttons: [
+                    {
+                        ...AnnoButton.BackButton,
+                        text: 'VOLTAR'
+                    },
+                    {
+                        text: 'AVANÇAR'
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    },]
+            },
+            {
+                target: '#perfil',
+                content: "Para conferir ou atualizar seus dados clique aqui.",
+                className: "anno-btn-importance",
+                position: 'left',
+                buttons: [
+                    {
+                        ...AnnoButton.BackButton,
+                        text: 'VOLTAR'
+                    },
+                    {
+                        text: 'AVANÇAR'
+                    },
+                    {
+                        ...AnnoButton.DoneButton,
+                        text: 'x',
+                        className: 'anno-btn-x',
+                    }]
+            },
+            {
+                target: '#logout',
+                className: 'anno-btn-importance',
+                content: "Clique aqui caso queira encerrar a sua sessão e sair Painel.",
+                position: 'left',
+                buttons: [
+                    {
+                        text: 'PRONTO'
+                    }]
+            },
+        ]);
+        $('document').ready(function () {
+            const frame = document.getElementById('suporteIframe');
+            frame.onload = function () {
+                //onload="resizeIframe(this);"        
+                resizeIframe(this);
+            }
+            if (getCookie("nmm") != undefined) {
+
+            }
+            else {
+                intro.show();
+            }
+        });
+    </script>
+
+    <ul class="menuul">
+        <li class="menuli border"><a id="menu" class="menuon menu-icone" href="#">
+                <img id="menuicone" src="/bin/gerenciamento/icones/menuicon.png"></a></li>
+        <li id="homeWebware" class="menuli border menu-icone"><a href="/bin/gerenciamento/dpPainel.asp">
+                <img src="/bin/gerenciamento/icones/homeicon.png"></a></li>
+        <li class="menuli">
+            <div class="menu-pesquisa">
+                <label>
+                    <img src="/bin/gerenciamento/icones/searchicon.png" />
+                    <input id="searchInput" class="searchbox" type="text" placeholder="Procurar" size="10">
+                </label>
+            </div>
+        </li>
+
+        <li class="menuli">
+            <div>
+        <li id="usuarioEadm" class="menuli">
+            <p class="usuario-produtos">
+                Olá, Victor Noronha
+                &nbsp;-&nbsp;
+                Sell Administradora
+            </p>
+        </li>
+        <div class="menu-left">
+            <li class="menuli">
+                <button id="statusApp" class="statusApp" onclick="window.location.href='https://status.ahreas.com/'">
+                    Status das aplicações
+                    </a>
+                </button>
+
+            </li>
+            <li id="logout" class="menuli menu-icone">
+                <a href="/bin/aplic/logout.asp">
+                    <img src="/bin/gerenciamento/icones/logouticon.png" title="Sair">
+                </a>
+            </li>
+            <li id="perfil" class="menuli border menu-icone">
+                <a class="editarPerfil" href="#">
+                    <img src="/bin/gerenciamento/icones/usericon.png" title="Editar perfil">
+                </a>
+            </li>
+        </div>
+        </div>
+        </li>
+    </ul>
+
+    <!--Fim: SUS1657 | WS | 19/02/2020-->
+    <!--
+	<table width="100%" border='0' bgcolor='#E8E8FF'>
+		<tr>
+			<td align='left' nowrap="true">
+				
+			</td>			
+			
+			<td align='left' width='100%'>
+
+			
+			</td>
+
+
+			<td align='right' valign='middle' nowrap="true">
+				
+				
+			</td>			
+
+
+		</tr>
+
+		<tr>
+			<td colspan='3'>
+
+				
+
+
+			</td>
+
+
+		</tr>
+
+	</table>-->
+
+
+    <table width='100%' border='0'>
+        <tr>
+            <td valign='top' width='15%' nowrap>
+
+                <center>
+
+
+                    <a href="www.selladm.com.br" target="_top" class="logoAdm">
+                        <img src="/images/logoadm/14804150.gif" alt="Administradora" style=" max-width: 200px;"
+                            border="0">
+                    </a>
+
+
+                </center>
+
+                <br>
+
+                <table class="menu menu-padrao" width='100%'>
+                    <tr>
+                        <td nowrap>
+
+
+                            <script type="text/javascript">
+
+                                function Check(frm) {
+                                    var str = frm.cod.value
+
+                                    if (str == "") {
+                                        alert("Informe o código doCondomínio.")
+                                        return false;
+                                    }
+
+                                }
+
+                            </script>
+
+                            <div class="condcod">
+
+                                <form class="form-menu" name="fastcod" action="dpWmCondominio.asp" method="post"
+                                    onsubmit="return Check(this);">
+
+                                    <input type="hidden" value="" name="chamada">
+
+                                    <font face="arial" size="2">Condomínio Nº</font>
+
+                                    <input type="text" id="cod" name="cod" value="" maxlength="5" size="4"
+                                        style="width: 115px; background: #fff; padding: 8px; margin-bottom: 6px;">
+
+
+
+                                    <br />
+
+                                    <font face="arial" size="2">ir para : </font>
+
+                                    <select name="go" id="go" size="1" onchange="validarConteudo()">
+                                        <option selected value="conteudo">Conteúdo</option>
+
+                                        <option value="novaversao">Nova Versão</option>
+
+                                        <option value="usuarios">Usuários</option>
+
+                                        <option value="iproperty">Operatus (asp)</option>
+
+                                        <option value="intramínio">Intramínio</option>
+
+
+                                        <option value="IC">iCondominio</option>
+                                        <option value='condopro'>CondoPro</option>
+                                    </select>
+                                    <div id="divSubForm">
+                                        <input type="submit" value="ok" id="submit1" name="submit1">
+                                    </div>
+
+                                    <div id="divSubURL" style="display:none">
+                                        <input type="button" value="ok" class="divurl"
+                                            onclick="TrocarConteudo('/bin/gerenciamento/dpWmCondominio.asp?cod=' + document.getElementById('cod').value + '&go=' + document.getElementById('go').value)">
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                            <a href="dpPainelWm.asp"><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDIvMDEvMTe2gTXOAAABVklEQVQ4jcXUsWoVQRQG4G+DEUEjeQULGwsLm2hSbGMw620UFsRSLMRnsIgE8xLBYGeagVgkTBGbwQtJE9HGwkdIIxgMIcHcNBPZ3LubBBQ8MDBn5uef/z9nZorBYOBv49LwQlnVVyHF8Kus6itYRy/FsN9FUjSVlFVdYA27eIn3mMz5kxTDjzaSsZb8Nh5gC/0Uwz308aWs6hvnkqQYfmM/n/46xbBYVnUvxbCAeWyWVT11np3HWEIPnxFxHx8xhxkEvEgxrI6QlFX9HG8wjSNs4GbjwO+YxeVs71WKYfkPSVnV73ItZnErK7jWYn8XD/Etq/uaYnh20uK32MYjrLQVL8cEPuFptnanrSabuJvTQ/xEgQGuYzzvbeWuYbTFe415P1s7Gf0O3OiNbcRBimGnofKgCzispDhjb6wDNwLsfB9n4YZJPlyQ5BSu+BdfwbCS/0dyDEIHbpQAdwqAAAAAAElFTkSuQmCC" />
+                                Início</a><br>
+                            <a href='/bin/gerenciamento/dpWmPainelAtualizacaoCadastral.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDIvMDEvMTe2gTXOAAABWElEQVQ4jaXUMWhUMRgH8N9ZsNihIB10dHQXhBYhDopmcFDjUAeXLrpUqKM4W9EOgog4qWi7pOKWDjrEwVF3cXHS1UVQK+fgHTx67+4d9L/kQfJ+5Ev40uv3+4YJMR3EfaxiBS9qybs60hsiIaYF3ME5/MQxvMJGLfnrJORA4/sNrmGxlnwCa7iALyGmWyGmo9MgpzCLuyGmk7Xk5ziOx3iADyGmS13Id8zhOnZCTGvYrSXfRMBnbIeYNkNMZ8YhzQM8jA28DTGdrSW/ryWfxw0sY3sc8qdlp6exFWJ6GGI6VEt+go+YH4f8bqsXC/5f+ZWWfyaW05bZaZBfHUhbuSPI3w6kNw0y14GMTRN5iR/7QmrJ67iMT/vZiVryO1zEo5a1w3af3zsxcl2Djl3FVXxrTM0Mxme4NxEZQP1a8haWsLkHWcft5vpe81FqS4jpCJ7i9aCzR/IPjWtljGyOgqoAAAAASUVORK5CYII=' />
+                                Ficha Cadastral</a><br><br><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmListaconteudo.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABZElEQVQ4jaXUsWsUQRTH8c8d2hsVexsRgiEQrCyWgGA2pQwH/gGiZUglFoaIBBuxjIJ/gOJgOxFsphMEm3RiLXqYBEsLWYublc155x3m1+3vvfflzcx722uaxkl1alqgqsNV3MONYr3F45zih/Hc3ngnVR3O4yFu4gJ6JdRgiDd4kFP8PhFS1eEK3pXif2mI6znF/WOQqg5n8QnnZgBaHeBSTvGw3zF35gS8xOeSuwP90sUyBnMAXuQUb+FH+R5UdVhuO9nGwgxAyinerurwGivFW8B2C1nrJO/j0RjgY05xvarDU4Sx2Frf3zptdNZr+ImvOcWVqg6b2JjUYgvZ63iX8QW/cBFLVR0GeDL5lPZayBaOOoEzeI91LOHVFMARtrpz8gx3piRP0/Oc4t3undw3GqB5dVBq/tyJnOIhVo1GepaGWC01jr1O2YVF7OKb0dK1aoq3i8V2b5iwxa1O9Cv4H/0G6CB4M8AiYKYAAAAASUVORK5CYII=' />
+                                Checa Conte&uacute;do</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmEliminaconteudo.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABVUlEQVQ4ja3UsWoVQRQG4G8XUcRnMFEM+ABp02RjyILYZMHGIAQiFrEKPkZKLSSmkdgI0yiBhRvnDXyAFCG5+BASIazFnYXrsMWG5G+GOf8//5w5c2aKruvcFHeGglXd3Md7vMYjXOAL9mMb/uT6Is+kqpu32MVT3J2j/uIUH2MbPg2aVHVzDz+wPuIEE7yIbbiEco44Hmkg6Y77SZmy2MHaSIMea2mdYnVj8wF+mdWgx1d8wwc8xG+8w0u8mtOdYrnEHpayXQ5iG75jBSdYSfODTLeEvWJ1Y/MCixl5jvXYhrM+UNXNE7OCPs6003LAQBIeVXVTJIMCRwMGsFhiOkCcYyu2oYM0bqV4jmmJQ1xlxHZsw1lVNwtV3UyqullIR9vOdFc4vJXbKbqu6/skr/wYvIlt+Dzf9ieu13A/Yxue8X/bPze7wjGYJD1u+xVnRtf6T/4BEXKDWDjECb0AAAAASUVORK5CYII=' />Elimina
+                                Conte&uacute;do</a><br>
+                            <a href='/bin/gerenciamento/dpWmMalote.asp'><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDIvMDEvMTe2gTXOAAABWElEQVQ4jaXUMWhUMRgH8N9ZsNihIB10dHQXhBYhDopmcFDjUAeXLrpUqKM4W9EOgog4qWi7pOKWDjrEwVF3cXHS1UVQK+fgHTx67+4d9L/kQfJ+5Ev40uv3+4YJMR3EfaxiBS9qybs60hsiIaYF3ME5/MQxvMJGLfnrJORA4/sNrmGxlnwCa7iALyGmWyGmo9MgpzCLuyGmk7Xk5ziOx3iADyGmS13Id8zhOnZCTGvYrSXfRMBnbIeYNkNMZ8YhzQM8jA28DTGdrSW/ryWfxw0sY3sc8qdlp6exFWJ6GGI6VEt+go+YH4f8bqsXC/5f+ZWWfyaW05bZaZBfHUhbuSPI3w6kNw0y14GMTRN5iR/7QmrJ67iMT/vZiVryO1zEo5a1w3af3zsxcl2Djl3FVXxrTM0Mxme4NxEZQP1a8haWsLkHWcft5vpe81FqS4jpCJ7i9aCzR/IPjWtljGyOgqoAAAAASUVORK5CYII=" />
+                                Malote - Documentos</a><br>
+
+                            <a href='/bin/gerenciamento/dpWmAtualizacaoDocumentos.asp'><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDIvMDEvMTe2gTXOAAABWElEQVQ4jaXUMWhUMRgH8N9ZsNihIB10dHQXhBYhDopmcFDjUAeXLrpUqKM4W9EOgog4qWi7pOKWDjrEwVF3cXHS1UVQK+fgHTx67+4d9L/kQfJ+5Ev40uv3+4YJMR3EfaxiBS9qybs60hsiIaYF3ME5/MQxvMJGLfnrJORA4/sNrmGxlnwCa7iALyGmWyGmo9MgpzCLuyGmk7Xk5ziOx3iADyGmS13Id8zhOnZCTGvYrSXfRMBnbIeYNkNMZ8YhzQM8jA28DTGdrSW/ryWfxw0sY3sc8qdlp6exFWJ6GGI6VEt+go+YH4f8bqsXC/5f+ZWWfyaW05bZaZBfHUhbuSPI3w6kNw0y14GMTRN5iR/7QmrJ67iMT/vZiVryO1zEo5a1w3af3zsxcl2Djl3FVXxrTM0Mxme4NxEZQP1a8haWsLkHWcft5vpe81FqS4jpCJ7i9aCzR/IPjWtljGyOgqoAAAAASUVORK5CYII=" />Atualização
+                                de CPFs</a><br>
+
+                            <a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmMenu.asp?tipomenu=adm&amp;acao=exibe')"><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAAAjElEQVQ4jeWSsQmEQBBF34hXwiGoVVwHmmisdW6+0ZZgFadgDQZrquiI4kb6ow8zPGY+X7z33JUUVaNRBmdNBlDWbQ+ke0vOGolunwG8CPJR/EYxMCizceH/wKRBJERPgmQiRdX0ymx01vwAyrrtgGRvyVmTxShNZB1mDny1S47emRR/CXJaD4MEKdsM2HEhE5edfYAAAAAASUVORK5CYII=" />
+                                Menu Geral</a><br>
+
+                            <a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWMdetalhe.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABm0lEQVQ4jc3UvWtUURAF8N9uloVAlHVN4UcKK0EhGD9YrPaBEJJVsHERREgnkn8g/0L6NEasUhibDcFCHrF7aaxtbARRAlHYFEFBi7hZi8zFZ6JVGgcudzgz59xzh3dfZTgcOm5Uj62A2mEg63Tf4VzUBgGP4Ce2i7x3+TCn0p69d7vk6C0KXAjSSOCDEP2IDFcC309OXpVE50NwHQ/wLPBHeIHruIMnZSdVbKGORZyMU8fjxDOxssAG0bMYnK3kZAyPcS1cfcdVLOFsHLaE8/iEH7gVnLHkpI5WDHMPp7BW5L1LWMFK5GtR24veVnBV0S/y3hxW0cA3tLNOdxkzmIm8HbUGVoPTTyITWaf7HgvYKc1r+I98BwvBmUgiXzCJp2jiBDaLvDePDWxEvhm1ZvROBlcNo7iPKbzGLu5mne4b3ICs023hIj7HTKaCM5pETscA+1gO603cxPO4wsPYt/HBwfcym+5XfjvTRd57GYNLMRcrRSN6pkvYH2+n7miM/wU70ltzMAN+P7avJWw/9t1SLfUmTOW/+Z/8AiBpcB/3OUomAAAAAElFTkSuQmCC' />
+                                Relação de condomínios</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/roCalendarioAssembleial.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABzUlEQVQ4jY3TO2gUURQG4G+TVUOMRETwQSwFQbSIoIUgZAszjc1Oa7CK2ogvRC0UfIBaiKaxUwiK+LpGsHC0GAQrUUEMPmJlIzZi42KhyFrMHRmWXc0Pw/3nPv5zzn/urbXbbdBI0mP4lWfhoi5oJOkR9OVZuNC5Vq/wNfjZTSBiBP3dFmpj48212IptUeQDlnXs+4r1MehL3M6z8K2ayRsM4GCMdKlHJofRxhUsx5mqyEDkvQ6XqHq1oLpQevIMD9HC4jjXwlAHH0QSx7/oi+MMQvy/i/uK0gLuRf4oz8JpvMLKbpn8xk6cwhIsjPyEwoezmMIBTGNRVaQ2Nt5s4yQeKDr0NGZU8kGM4a3iGoxgDjN5FlrVckq0O/hQnoUXuKPoSjOKTuJTI0k3VTPZj6WxhOOVci7jEL5jt+KOyLPwsZGkEziPLWUm/biBfbhV4dPYhdk8CzdxVHFf5Fm4jlk8qccok1ihaOXeKNyK4hvwvDK3o5GkU7gaPTtXx0ZMYDWGK54MKzo1G4PANcXTGMIPjGKuVr7iXmgk6TC+YE8soZxvRrM3/1ckHhhVdOh9/NYpHmSaZ+H1vESi0Co8Vnj0DtvzLHyGeYv8C38AU+qKqAtbtTsAAAAASUVORK5CYII='>
+                                Assembleias</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmComunicadoAdmNET.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABXklEQVQ4jaXTz4tOURwG8M99vSuJoihRVsOCFRvKwi05ZWE4G7ZWbBQlO9lYqFkQK8pCSRZnf2g6/8DYyI9iYUdSxIbGyGvxXtOdk9E7M8/ye5/nuec53+c0o9HIWjFYs8NqTNoQ77UhruvPmknjtCE2uInTJadtKz5JG+JxvMAFzNffhx1pF86j6ebfMYvDOIN99Y87zdmS09XmyLFTR3ENhybKxWvcwHPM4P4QTycU9zGPi3iEu6tZ8Xo8wVZ8wYYBFlZo8gMH8Q0bsTDAHjz+B/n3Mia/MIXbiLg0KDm9wzk87BGvYydOIFUmm0tOt/AJH0pOdxbL1oZ4AHMd8XLJaeavqg1xyngj03hfctrRd+1f7JsuL4Q+qeT0tuR0Elewqc63pPZtiM+wH5+xveT0sxa0Ie7Fq5LTonBYcWY7ky3YbVz1JSg5vaxndU8eGO/+I77W5OUw8Sv+H/4A6SBl6qfp7A4AAAAASUVORK5CYII='>
+                                Comunicado Adm</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmEnquete.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABH0lEQVQ4ja2Tv0oDQRDGf5voiekURAypA7G1TSGCYGMV8w4W+ghJ4SukshHsBN1+q32AgHVKOy0E7UyCJmeR2XVI7s4iN3DszHzMxzd/zqRpyrpWWZsB2AA4Oeu8SpwAV97ZB8nfA+fAGDDLxd7ZeiQBDhRWU/4usCNfrmW1s6n8raLiYEFJV94qMFT4DXAH/BSRmDK2Ewa7LXEFmHhnZ5JPWLQ3zyr2zo4jCfCsSHrAo8QD4BiY5Yg41CQtBewpvwU0/+kmkoyUkneFj4B9FoNduZNlkiN5DTBV+DUFMwlW6nYuJK4CQ+/si+TbQIOcO/HOPkUS/rYBcAncit8HTgtEGMg++2/lTzPwFQtK3uRNgC+FfwCf5PzFUU4Zg/0FlZNBslwrjRkAAAAASUVORK5CYII=' />
+                                Enquetes</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmAniversariantes.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKnAAACpwB9NLfEgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABXElEQVQ4jZ3Tv0tWURwG8M8NhSIkNxGKJit1ClTChvAl8F1938nGUkGHIKdQl/6DAv+GWry1xbt0t4KgtSVoeKdocVDMIe00dO7L7XiFiw984TzfH8/5PgeOEIJqLCx2bi8sdqYqfCmpTaYzl5zFc+xAq92dwKtWu3sz1rawnQ4M1YjMYjieJ3EDt9DHXE1/rUjOYMP3+Ioi8j38SQfq7PyIoejlJ/hW9PLTtFZFFkIYkOj9KkK1p4YfFb28f56d15iv2S7FJ9wvSWrndwOBM32pyLWGIv/1pXZWMdZA5GeVZCEErXb3La7gECcNRIYwguOil3fKTZYaDJ6L8k12cRzPfazhKfZj7gDPsILvMfcLL6sib3APT/AAExjFTMzdxWVM4SEex/690ht8xBd8xgtcj/lH+IBNTMfcMt5h3b9/lpUih/HWmcTunRhVjGOjMjewk7kYMpK/c1H8BUKWcXM03A3iAAAAAElFTkSuQmCC' />
+                                Aniversariantes</a><br /><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('dpWmConvidarResponsavel.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABdklEQVQ4jY2Uv0oDQRDGfwmxMVjYhEDQFAoBUTsFSSGszVpYbWMl+AA2qawELXyFvIIg228h25nKwhQWQlIEiYKNlTY5cxa3C5e9TfBr5s8383FzO0wpTVMAhFQ14BHYpIgxsG+Nfo9wlNI0RUjVAO6ALWCU41OgDGwDfeDEGv0xT2QA1ICmNforLBJSPQBHwBtwYI0e5/mysxvAa0zA4dvZNaAnpKrHREI/xErOXweMkKrpE5UcWVogcg9MnF8F2kAPaIQic2GN7gJdHwup+sCujxeNgJCqIqTaiVBJPlgoYo1OgGch1XVAzYxeGEdIVQVuyOb1r3AlpFoGLq3Rv2FP7J/UgU4k3wFugcIaFMaxRg+BPeAYOHfpH7Ili+5R9HWs0U/eF1KdARfW6JdYbSiSFsjyEsl0IiJ9M7X5caZhZTKdhKlorRcZAi0h1eq8Lg9X03I92Rc7e0h2CgZCqlGkN48m2Vk49YnSP49SHgOgbY3+9Ik/Yd9vpy4iY28AAAAASUVORK5CYII='>
+                                Convidar Usuários</a><br /><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('dpWmNotificarLinks.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABEklEQVQ4ja3UoU4DQRSF4W9JCx4sHhQJxSEbRFEVFcUQHoDg+hZtgkAgGxyCKgQVpIYER0JQpAmGl2hAdBGdLbvLQtuU4+7Mvf+ePZmZKI5jy2plaQJK6aJaa1zhCKt/zHzietDvnfzmZBPlGR8uh76p8pASohmQSO4P8pDxDEBhXx6yPick05eHvM8JyfRFcRyr1hotPOEVB2hhp2D4BR3cYxt7g36vkzhp4xJNPKCOUwzD/jDU9bDfDP1tsilv4RzHuEAPz9jHI95wiDNU0vYSJyPfiVfQxZ1JgDfYCHU3BRiHuamTFT/Pxy5u8YG1gnyixMQ8d6cIkNG/XMB0Jou+CXGYm0IGycICGoW5yWFbVl+ASjrpot8pdQAAAABJRU5ErkJggg=='>
+                                Notificar Usuários</a><br /><a
+                                href='/bin/gerenciamento/dpWmLembretePagamentoNET.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABtklEQVQ4jZ3UO4vVUBQF4C/jVWF8FeJUMgqCCDY2ilbBRglYSUBUxGoUBRsLRcv5AwMWNhaioygaC0GInQSmsvKBrYI61SA+cR7X8Vrk5HpuvFq4ISRn75WdtdY+OUmv1xNHmuV7cB/j/h7LOFKVxQNI4iZplo/hLlLMIwlXHD+xCu9wviqLh50WYDv2o8BtrMBIqK0MLy+Ej0zgDkb7TdIsX4/NYfkST9BFD0lVFt8j7ByOYS10QvIcDmFrwF3E8aD9G5I0y2dwqSqLBWwMLBf7TXClJesRbuEy9obceMC9iXCJSO9iVHiMySDteVT7EuEHokkuRbktGMUr7FAbSj2V5X81ice4AVM4gNP4GGHa48ZvT9ZEube4gA843KoN7sxWk6fYhdVqI2+gwskIEzMfKuegevNcDev3mA2MZkJuXcRkgFEHqrL4jOk0y5/hLG5WZXE9YKbSLL+G2aosmvHOqY0eieU0MRbuE2mWbwvPXbUvm9Isn1SbuzNIT4Y1adzfFy74gVM4g90t/Ff+NOqF+p+J41Ogv9TKv8YJWkcB/fPknnrTUWufD/Qb5l0cHXqe/G/8ArkgdZ9JJzh6AAAAAElFTkSuQmCC'>
+                                Lembrete de Pagamento Online</a><br><a
+                                href='/bin/gerenciamento/dpWmLembretePagamentoMenu.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKnAAACpwB9NLfEgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABkklEQVQ4jaXUv2sUQRjG8c8eFzwkWNiE4C8UES0CAQuxiHDT3KBgcdNZWuU/iGUgjX16S7u1EIS1yHqFYBUbC0UFgwbERoOFqIVr4UQvuTvuwAeWnZ155sv7zjxs0TSN/1Xr8ESIaTPEVOTxUohpN8S0lL+LENPmREiIqRNiGmD5yeMH++Vdx4n8lueXQ0yDEFNnXCXPsVdX5Uq3158PMa1hNa+thpjWur3+fF2VK9jLflA0TSPEtI5bdVVeyKU/wqkx7X/AjboqX4SYXuN+XZXrRbfXP4NtXMUnvMPx8UcIPuMsFvAMl1uosFNX5RtsTAHI6xvZv4Oq6Pb6AR/xCu9xcgoEdnEaF7FY7OckxHQst9OZvPevvmOhrsqvHLydkcxMUWtkgJ+YNb5N9o9AFtGeEdLO/n+QnL4tzM0ImcPWfmqLbq/fxnm8nBEwrEt428Y13DPUY1bj4BkV+RlWhdttPMUV/Dpk6OBbBhU46s/VDquFL8Wk/0mI6Sbu4gh+4E5dlQ/HeSdmI28Y4BwGkwDwG8Jle1GiN/7sAAAAAElFTkSuQmCC'>
+                                Lembrete de Pagamento</a><br><a href='/bin/gerenciamento/dpWmRecursosAcessos.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKnAAACpwB9NLfEgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABhUlEQVQ4jZ3RP2gUQRSA8d/G06CdFtr4rxBUsEohiNUtklsxTW4riSJY2yqYFCKIiBZWgoWCoO2IaKJTyICF2lkF1N5GG2MR5AK6Frcni3jJ5QammHlvvve9N1lVVfKiXMQZm19LKYaZrN3pPsURvB4DcgqfWpjFnRTDlc0S8qK8jcsT9XnbGBZ/3w0g2ZiQrAnp/RvNi/LACJAeZO1OdwUfca0R3IcH+IwlvMLPOrYFk7XFdRxtYQo3ca8B+YW1GrAfz7G9EV/Gal1kLquq6r+eeVHexe4Uw1xelJNo6//kcXyvCzxJMXxtrdPvQ7zLi3JriqGHiJgX5QU8qqG7sDAxjJBiWMYPnG7Y3aoBl7A3xbAAQ9tptHQQXdzQH+QiVlMMs4O8oSaNlqZwHvN4mWKYxp68KN8MktY1qW0+4DCuYho7Uwwn86J8j284u5EJvMAOPE4xzOB3XpRvUwwncAxfRjE5hIsphvnG3TP9Wa3hvqqqxtrtTnel3emeq6pq45mMsv4AQQ+moryBmZ8AAAAASUVORK5CYII='>
+                                Recursos acessados</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmUltimosAcessos.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABsElEQVQ4jZXUTYiNURgH8J9pEmVDYTOKxSTysZmw4L7ZcF9ZuW+sZkHZ2PjYaVKKDVkrO4QszkSNeicL0xlKBlkqyoIpNxZ2PmZuXov3vSa3e++Mf53Ox/Oc//k/z3POURSFzlarN27W6o1j3Wzd2gAkaTaQpNkKC9iCdZVtY5Jm2/XBQNWvxPskzY5X8zk0kzTbhxdo9CNZVhSF6sRRXMIhfMRPXMRqXI55+LwoSUW0CztRYAJfIebhdz8lg0ma3cJwtXEvdmAMJ/EMD6q+dzi1euOoMonNmIeQpNl6RGyufN7hTUX0MOZhtmc4SZrtxhGcxzWc7fD9ged4hSeYinmY+0uSpNkwpvAI57AN97GpRwSzmMG9mIfxdomX4wbOxDx8n54cn8HLPmkYwgjW/BNOJ5I0O4UrWNVhmq8Uj8U8vGXhsnXDBF53WW/hG5rthZ4kMQ+flIlsS23hl/J2n8DtJM02LKaEMtlfqvEk7lRkcBjXkzQbGVwCyVPswWnlcxjCfmUxDmJtXyUxD/O4iwsxDx9iHloYxWPlI72KA0v6L7r8N1tr9cZ0e96zxP+DP6/s47lXzB+sAAAAAElFTkSuQmCC'>
+                                Últimos Acessos</a><br><a href='/bin/gerenciamento/dpWmUsuariosConvidados.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABjklEQVQ4jY3TP2sUURiF8d9EDeQLiKIoWFiIq2AjwWoHZAet3IGQQkXsNCCCoIWgEFDRkM42ZQSFSbpwg3BTWBgbJSJWIhrIYpNGECtdi51i3T+ze5pb3MPDue97T9Jut/UqzfJnuIl3mImh2O0zdSnphaRZvoTLmEQbH3AphmJ7GGSiB3AP10sAJDiD1SRJRidJs3wPvuPQEO90DMXmqCQHKgDKRAPVDfmrM4Nh+jMO5Ae+VkDejoTEULTxZIjvdQzFx3GSiKFYwuMezxtcqEj433ZmcBVXMIXTaG2sr2zVG82nOIgbMRS/BiZJs/wcXuIidvAIxzFbbzS/4C7OdvknuyFJvdGcwiZOVSTejKGYTrP8Dm5jP9YwF0PRSuqN5nPMVQDaOIxZLGIbEdfwCecnyjlUaWdjfaWFeXzGA51yruEkXiT1RvMojmGv/s+WYBffynMeizEUP9Msr+m0POlr8SClWZ5gCzUsl896X17fGgtSgmpYxRH8xj48jKFYGBtSgk7glc7678dQLMA/kAqBnFy4vBYAAAAASUVORK5CYII='>
+                                Usuários convidados</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmUsuariosLiberados.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABjklEQVQ4jY3TP2sUURiF8d9EDeQLiKIoWFiIq2AjwWoHZAet3IGQQkXsNCCCoIWgEFDRkM42ZQSFSbpwg3BTWBgbJSJWIhrIYpNGECtdi51i3T+ze5pb3MPDue97T9Jut/UqzfJnuIl3mImh2O0zdSnphaRZvoTLmEQbH3AphmJ7GGSiB3AP10sAJDiD1SRJRidJs3wPvuPQEO90DMXmqCQHKgDKRAPVDfmrM4Nh+jMO5Ae+VkDejoTEULTxZIjvdQzFx3GSiKFYwuMezxtcqEj433ZmcBVXMIXTaG2sr2zVG82nOIgbMRS/BiZJs/wcXuIidvAIxzFbbzS/4C7OdvknuyFJvdGcwiZOVSTejKGYTrP8Dm5jP9YwF0PRSuqN5nPMVQDaOIxZLGIbEdfwCecnyjlUaWdjfaWFeXzGA51yruEkXiT1RvMojmGv/s+WYBffynMeizEUP9Msr+m0POlr8SClWZ5gCzUsl896X17fGgtSgmpYxRH8xj48jKFYGBtSgk7glc7678dQLMA/kAqBnFy4vBYAAAAASUVORK5CYII='>
+                                Usuários liberados</a><br><a href='javascript:void(0)'
+                                onclick="TrocarConteudo('/bin/gerenciamento/dpWmUsuariosEstatisticas.asp')"><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABbklEQVQ4jc3Uu2pVQRTG8d8JKUQjKIRoZSMJIqTTOjCNgyISxyJewEolD6AIaQVBBF8iGhQ2iNUuwlY0NgYFixT6AII3OImJN4zHIpPDaExxTONqhvXNmv+sCzOtTqdjq9a3ZQL6ez0QYjqGKxjEEF71DEEbo9id/W3/Us5zvC38Nz1BQkxDeIkDuIuPWNwACTHt3ASwD/MYwfWmriZwCKdb5YhDTMcxgztNXV0s9GE8wR5cxTQeNnU1QjHiENMEHmAHLoSYprN+EM8y4DLu4XX2dSEZMINVnMJTnA0x1XiEXbjU1NVN3MJ2LK9D+kNM93ECX3C4qasFVCGmWRzJcQntENMY3met1YVgAQM4jzMhpgGcw0lcw2NrI51DxI8/m97X1NUUxjGFG3iHo3iB27m0uRz/rczgt57kmycL/QP2Z+jeQt8AKCHfN9GX8PNvB0tbfzufrDV2FZ+xiK95XclaK8ct5b12N73/5j/5BemYZsQHcBACAAAAAElFTkSuQmCC'>
+                                Estatísticas</a><br><a href='/bin/gerenciamento/dpWmTermosquitacao.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKnAAACpwB9NLfEgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAACCklEQVQ4jaXUO2gUURQG4C9LtFBQEYwWwQdJGiE2IgoSzQ7IDqbbKZQUWkgKBY2CYiWkSKeiCaQSA1ppMXaRsRmMIkhiHQKJxFeKtYv4Rh2LvYuDpBFPc17/uffMmf/ctqIo/K+0rxaM4qQHwziKXVjCQ4zlWbrwN76t3EkUJxWcx1Ys4Bg+Yx3uowcN3Myz9FerrlI6YAsmMZ9n6WX04jSeBt0b4vOYDPg/h0Rxsgbj2IQvUZwMYTrP0kVsDno6xL8E3Hioa35OFCfDWMQjDOEi7uIDYmTYgBO4hluooTvP0rH2KE66sD3P0rHQ1YsAfIAd2I9neI33eJFn6Q9MRXFyPYqTrgpGMFsadn8ANvIsncFSnqUzeZY2Aq6/hJ3FSAUR5kqJjeHWlpRp8CbkWzKHqK1aq3/HHayExCE8x/fgH8Z0sNfiAJ6ULjypWqsvV2v1PUVRKIpCtVYfrdbqHSX/asnuqNbqoyV/T7VWX64gx+5SiyvoLPlfS3ZnqWOhLm/XHOwZ3AuJxxiI4mQbduJgFCdn8Ap7NX93S/ZhpMWTc3iJd5pcGMAo3uIUbocurmBKk0Od6MqzdLxF+wmcxaXQ2Qi+5lk6jUbQ30q5SwE/QaB9nqU/MYiPOJJn6T30RXHSjUbQfSF+JOAGQ92qW3wBHZpbfByfsD7MrEeTtTfKW9y22qP0r+/Jb7Ah4RmWQRZ1AAAAAElFTkSuQmCC'>
+                                Termo de Quitação Online</a><br><a
+                                href='/bin/gerenciamento/dpWmMetricasdeUsoApp.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAAA4klEQVQ4je3UMUoEQRAF0DciKognMFm8gIK54ESTKXayxubGegI9wMabugYjmk00YK6Ch/AEJmrgmLTQrtOugolgQUNV/V+/qpumiq7rpFZW4RI78nbVNvVumihSkbIKZxjG8B7XCXcLG9GftE29/w7MT3UZxuJbvGIpwW5wh83Iy4rAedvUJ7m7lFU4xnqam+vhLecEcnifyI/tX+SviTzNqPmE9/3Yg7IK29FfxAoe8Rxza98RGcQDDzjFEVZzo816k3Hb1COMvyJNTzLBHhZifFhWYeDjfnnBRVpU/MZSegNRPzSzSPis9AAAAABJRU5ErkJggg=='>
+                                Métricas de uso App</a><br><a href='/bin/gerenciamento/dpWmMetricasdeEmail.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAAA4klEQVQ4je3UMUoEQRAF0DciKognMFm8gIK54ESTKXayxubGegI9wMabugYjmk00YK6Ch/AEJmrgmLTQrtOugolgQUNV/V+/qpumiq7rpFZW4RI78nbVNvVumihSkbIKZxjG8B7XCXcLG9GftE29/w7MT3UZxuJbvGIpwW5wh83Iy4rAedvUJ7m7lFU4xnqam+vhLecEcnifyI/tX+SviTzNqPmE9/3Yg7IK29FfxAoe8Rxza98RGcQDDzjFEVZzo816k3Hb1COMvyJNTzLBHhZifFhWYeDjfnnBRVpU/MZSegNRPzSzSPis9AAAAABJRU5ErkJggg=='>
+                                Métricas de Email</a><br><a href='/bin/atentum/atOcorrenciasWM.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAAAzUlEQVQ4jd3TIU7EUBDG8V9JFVdYg0H0CAhEa2hWlIRKuBGSK4CsWASpKoJDIDBobkA2bBF9TUh3u6F0FaNeJjP/fDPvm6htW3PjaDYBUXpx9TUTtokD4AnPiCY0t0ixjEOiburqbqqELC8/sezHOJ4K+Nl3kMX+U8j6j/1r6L94keVlYrpPFnSOnX08sc6tYwpOkOAV72OKon1XnOXlNe5x09TVw1jdTkiWl6e4xDkKPOIFq6au3ob18TAR4gy34b0JoAIf2ILsHee38Q17PDF8L5CpKwAAAABJRU5ErkJggg=='>
+                                Ocorrências do Portal</a><br><a href='/bin/gerenciamento/dpWmGruposDeUsuarios.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKwwAACsMBNCkkqwAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABtUlEQVQ4jaXSv2sUURTF8c8mirIoqFU0/sDOgIqFmEaJDkjGymIaCwsJqKUWaVSwUMg/kE5BizQ2z27xReEFRQS7CIIpTdRGEBLUJhLXYt/iZLMK4oVheGfO+3Lundtot9v+tzbVD0VZ3cRlnEsxLPS7UJTVITzB/RTDFDS6SYqyGsFrbMdznEkxtHsADcxhDF8xmmJ4N1DzDGUAHEWjT5BG/iZ7h6AOWUArp5mem338s5eQtensaeU7nXaKsjqNGZ0ZfcRhzOIKdmTGMu5hHG+xF2u42B1sC81aW3Aeb7CUz/uzBsdrAVtdSFP/epBiWISirA7gdh9Pswt5iBM4iEF8z5G/FGW1Fau5nac4gp0681zEqwFIMUxgCiO5nT0phjGM4hPeYzjFMI7h7BnBnRTDpfqybcNqimG5pt3BrvxMYiLvzkpO2GT9L57FtaKsttRngh+5vZmumD3X853fG5s/HsMFvMAH3M2Qzfk9mWdyEo9SDPMbIBk0iLM5xW7rax438CzFsNYVN0BqsCXs65FfphhO9XoHeoVaraC++m1862f8G+SqzjCX8BkBt/oZ/9jOv9QvEy6P25G1FAUAAAAASUVORK5CYII='>
+                                Grupos de Usuário</a><br><a href='/bin/manual/wm/adm/Manual.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKnAAACpwB9NLfEgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABTUlEQVQ4jZWUvUoDQRSFv5UYiaIIdqKCryAItjtNFrHKdJrKQlEbH0Bb0dJK7C20GOsRyaT1EYRYCKkUq4DG/1hkRjbZ2TGe5hb3no8z3MtEcbnSAG6BOhCRVQeYA3aAqtHqon8gisuVDrBttDrxAAAQiVwAToERYNdoZdL9IVvH8gBWU8AkYICaSOSaDxJU/eryGjgHJoAb4CzdL9j6KhI5Dez7IHG58gk0jVbrIpEbwJIPUgSegONAoC9bx/sbDvJtQfMByDvQ8DXSkFFgMQB5AWp0V+6FDButHkUiDwIQZ84sw0HeRCJngSP8BwfQAjZtai+kZLRqAquBJE65SdoikTPAYY4xAlpGq61QkiLwAOwFErgVZ57rIENGqw/gPgBJp+rRQGf/lxzk+R+ezGwBuAOWRSJL5K/XqQPE1tMDqdL9kFYGTNK2oF/9AOHjUHq2hePxAAAAAElFTkSuQmCC'>
+                                Manual</a><br><a href='/bin/gerenciamento/dpWmArqReservaEspaco.asp'><img
+                                    src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAASCAYAAAC9+TVUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAKnAAACpwB9NLfEgAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNXG14zYAAAAWdEVYdENyZWF0aW9uIFRpbWUAMDQvMDUvMTdaM5ejAAABTUlEQVQ4jZWUvUoDQRSFv5UYiaIIdqKCryAItjtNFrHKdJrKQlEbH0Bb0dJK7C20GOsRyaT1EYRYCKkUq4DG/1hkRjbZ2TGe5hb3no8z3MtEcbnSAG6BOhCRVQeYA3aAqtHqon8gisuVDrBttDrxAAAQiVwAToERYNdoZdL9IVvH8gBWU8AkYICaSOSaDxJU/eryGjgHJoAb4CzdL9j6KhI5Dez7IHG58gk0jVbrIpEbwJIPUgSegONAoC9bx/sbDvJtQfMByDvQ8DXSkFFgMQB5AWp0V+6FDButHkUiDwIQZ84sw0HeRCJngSP8BwfQAjZtai+kZLRqAquBJE65SdoikTPAYY4xAlpGq61QkiLwAOwFErgVZ57rIENGqw/gPgBJp+rRQGf/lxzk+R+ezGwBuAOWRSJL5K/XqQPE1tMDqdL9kFYGTNK2oF/9AOHjUHq2hePxAAAAAElFTkSuQmCC'>
+                                Arquivo de reserva de espaço</a><br>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+
+            <td valign='top' width='90%'>
+
+                <iframe name="conteudoPrincipal" id="conteudoPrincipal" scrolling="yes"
+                    onload="resizeIframe(this); fechaCarregando();" style="display:none;"> </iframe>
+
+                <div id="container-interno01">
+
+                    <table border='0'>
+
+                        <tr>
+                            <td>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+
+
+                                <link rel="stylesheet" type="text/css" href="/bin/css/gruviBanner.css" />
+
+                                <style>
+                                    .Aviso_cobranca01,
+                                    .Aviso_cobranca02,
+                                    .Aviso_cobranca03,
+                                    .Aviso_cobranca04 {
+                                        background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAAjCAYAAAAXMhMjAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABZ0RVh0Q3JlYXRpb24gVGltZQAwNi8yNC8xNnjXghkAAAAcdEVYdFNvZnR3YXJlAEFkb2JlIEZpcmV3b3JrcyBDUzVxteM2AAAFFUlEQVRYhbWYX2gURxzHPzN7fxLMJrlerY00oKZRopb0QYr0QdfaP1Kv9d6KFhWElMYXo2JpS6hUfGh9UULbtLRQQR/Eh3rQo0WfFlFRn9pKe1gbCREEG9bTrOa83O5OH3Zi/l6S5i5f2Nud2Znf73Mzs7/57QqlFJWqr7fNAE4AHwLfAl0tnTm/UruyCmC1wGlgB3BZn0/r+opUMRywF3gH2NrSmbOArbq8t1LDFcMp33sr8EpnWjpzVwFaOnNXA887E/jem5XaFpWsOeenLUsLQ/fPRmI1ydq6xstBECwWUj4sPh5a75eKTnxR405pGH2JdHZeTuYFl8+kVgAfALuEMJpAoVQwZlSEE6JUMAycBb5LpLNXFxwun0ltI3wyl028o0ABgtGf8SoAnybS2RMLBpfPpHYC3wNxABX4oHwQAmHEEMJAKR8VeBB4ICIIaYw3cTiRzh6pOlw+k1oHXACRQPkEQQkjVkesoRmjbjEyWotAoghQXhG/kGdk6C5B4SGIpyNZAt5LpLPnqgaXz6RiwDngbZQi8J4Qf7aV2qZ2lF/Ce3QPr/AA/CIYEYx4PRGzCVUq8Lj/svb0FPA6sDmRzj6azW9kLv8AeAV4HaUI/CI1S9ZS29TOk3s3KA7+TeAVpywzYcSR0drxUKNaB2wAfpnN6Vzj3KtATAUesYYXqG16ieE71yjc/Q0VeMhoHBmpmXCgfILitIMjNeCsmgDnOvaiMu2aw9aS+OJVjDwYoOj8E64zI8o0TydCRhBG2YlZOl3lZP8RXSmA44APHJzaTcRQPkbcxKhppDh4U1cbhPHjfytapv5z17EjwH4zaanRkdsO7AMuadjjrmNvGOsTAggU/nAev/gIISPzBZsg17E3uI59XBcvaY7tANJ17AbgGNBjJq1zrmN3A12AN8GKkPgjwzweuILyCno6qyIP6HIdu9tMWhmgBzjmOnaD1CBxoMd17BrgENBtJq0rU+0IUE+3gapI++kGPtL+ezRPlwQOADkzafUBm4Ah4FRZa1NDw3w0eT2cAh4CmzRHDjgggXrCvQ/gOcJhdmYxVm04R/tdossFoF4CgxoQTVwPtE7qXLUFpjU5xrRqv3/pcj0wKIGjwGrXsdeYSeu6pj7kOrYBkM+kIkBjleESektE+zkEFMykdd117DXAauCoBHqBO7oBwB7C94CULptMSY8qVqu2i/azQ/tFc9wBeqWZtEqEgXe369gdZtK6AGwEbujGzwBrqwy3CnheX98ANppJ64Lr2B3AbuCgmbRKEQAzaZ3X8a1Zly+OM7QOiFUZzgBeA/40k9Zt4LaubyYMY+dhDilTPpP6FdhSZTiA34GXE+ls2QYzZiX5TGo98EaVoUbVDrw/U4PZUqajhFOwUPosn0klyt0sC5fPpPYBmxcEaUwrgS/L3Zyy5vKZFMAu4CTV3ERn1hfAkUQ6WxhfOV02aABNwM/ACmA5UC4JrUQe0A/cBOqAGsa20bJwPmEKFSEMlIs0YJs+VgLLlPJfFMKIIqQvQOgxFuFgK6UUChVIFfhCSNkHYgC4RbhF5oA+4AHgAkWmmaV5f47o/6G9E6W+EcLwpZQBQgYIDCBAKZQKROB7UQU/Lu/4Y8+sBqdRRd9Kbn298qRA7B5LMkbPQh/qWmnkybtt+wf+nY/9ir4yxeN1HULKj4U0+oU0wpcaGUFI476Q8itpRLfNFwwqHLlR9fW2rQE+ASzCdXW4pTN3ccZOc9B/jAneNgXtzu0AAAAASUVORK5CYII=') no-repeat;
+                                        padding: 0 0 0 65px;
+                                        color: #444;
+                                        background-position: 15px 10px;
+                                    }
+
+                                    .Aviso_cobranca04 b {
+                                        font-size: 15px;
+                                        color: red;
+                                        width: 100%;
+                                        float: left;
+                                    }
+                                </style>
+
+
+                                <div class='MensagemDoSistema'>
+                                    <div class="mensagem-sistema-titulo" face='verdana' size='2' color='black'>Mensagens
+                                        do Sistema</div>
+                                    <div class='card-mensagem-recurso'><a href='dpWmLiberaUsr.asp?s=Webmínio'><img
+                                                src='https://imagens.webware.com.br/images/tick_cinza.gif'
+                                                border='0'>&nbsp;Liberar acesso de novo usu&aacute;rio.<p>Quando novos
+                                                usuários se cadastram, você precisa liberá-los, para que tenham acesso
+                                                ao sistema.</p></a></div>
+                                    <div class='card-mensagem-recurso'><a href='dpWmUnidadeAgregaNET.asp'><img
+                                                src='https://imagens.webware.com.br/images/tick_cinza.gif'
+                                                border='0'>&nbsp;<font color='blue'>Existem unidades a serem agregadas.
+                                            </font>
+                                            <p>Existem condôminos que possuem mais de uma unidade no Condomínio, então o
+                                                sistema considera uma unidade como principal e as demais como agregadas.
+                                            </p>
+                                        </a></div>
+                                    <div class='card-mensagem-recurso'><a href='dpWmUnidadeProcessaAlt.asp'><img
+                                                src='https://imagens.webware.com.br/images/tick_cinza.gif'
+                                                border='0'>&nbsp;<font color='blue'>Existe solicitação para correção de
+                                                unidade.</font>
+                                            <p>Existem condôminos que solicitaram a correção da sua unidade no cadastro.
+                                            </p>
+                                        </a></div>
+                                    <div class='card-mensagem-recurso'><a href='dpWmUnidadeProcessaPosicao.asp'><img
+                                                src='https://imagens.webware.com.br/images/tick_cinza.gif'
+                                                border='0'>&nbsp;<font color='blue'>Existe solicitação para correção de
+                                                posição do usuário no condomínio.</font>
+                                            <p>Existem condôminos que solicitaram a correção de sua posição no
+                                                condomínio.</p>
+                                        </a></div>
+                                    <div class='card-mensagem-recurso'><a href='/bin/aplic/usuario.asp'><img
+                                                src='https://imagens.webware.com.br/images/tick_cinza.gif'
+                                                border='0'>&nbsp;<font color='blue'>Clique aqui para atualizar seu
+                                                cadastro.</font>
+                                            <p>Seus dados no cadastro de usuário do sistema está desatualizado.</p>
+                                        </a></div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="quadros-interno" style="width:980px">
+                                    <br>Atualização de conteúdo: <a href='dpPainelAtualizacao.asp'>Clique aqui enviar o
+                                        arquivo 'remessa'.</a><br>
+                                </div>
+                            </td>
+                        </tr>
+
+
+                    </table>
+
+                </div>
+            </td>
+
+        </tr>
+    </table>
+
+
+    <script type="text/javascript"> document.fastcod.cod.focus(); </script>
+    <style>
+        .rodape {
+            float: left;
+            z-index: 999;
+            bottom: 0;
+            position: fixed;
+            width: 100%;
+            border-top: 1px solid #ccc;
+            background: #D3D3D3;
+            padding: 10px 0 10px 0;
+        }
+
+        .rodape .direitos {
+            float: left;
+            text-align: left;
+            width: 323px;
+            margin: 10px 0 0 25px;
+        }
+
+        .rodape .logos {
+            float: right;
+            text-align: left;
+            width: 110px;
+        }
+
+
+        .rodape .logos img.logo {
+            width: 100px;
+        }
+    </style>
+    <!-- Button HTML (to Trigger Modal) -->
+
+
+
+
+    <div class="rodape">
+
+        <p class="direitos">
+            2026 - Webware - Todos os direitos reservados.
+        </p>
+
+
+    </div>
+
+
+
+    <div class="carregando" id="carregando" style="display:none;">
+        <div><img src="carregando.gif" />
+            <p>Carregando...</p>
+        </div>
+    </div>
+    <div class="help"><a href="javascript:void(0);" onclick="TrocarConteudo('dpwmfaq.asp');">Ajuda</a></div>
+
+</body>
+
+</html>
+
+<div id='nome-usuario' style='display:none'>Victor Noronha</div>
+<div id='email-usuario' style='display:none'></div>
+<div id='nome-administradora' style='display:none'>Sell Administradora</div>
+<div id='codigo-erp' style='display:none'>0846</div>
+<div id='nome-aplicacao' style='display:none'>Condopro</div>
+<div id='chave' style='display:none'>7785e735e79f2e26</div>
+<div id='campanha' style='display:none'>47ab7656</div>
+
+<script>
+    (function (f, b, g) {
+        let nomeUsuario = document.getElementById('nome-usuario').textContent
+        let emailUsuario = document.getElementById('email-usuario').textContent
+        let nomeAdministradora = document.getElementById('nome-administradora').textContent
+        let codigoERP = document.getElementById('codigo-erp').textContent
+        let nomeAplicacao = document.getElementById('nome-aplicacao').textContent
+        let chave = document.getElementById('chave').textContent
+        let campanha = document.getElementById('campanha').textContent
+
+
+        var a = {
+            key: chave,
+            campaign: campanha,
+            name: nomeUsuario,
+            email: emailUsuario,
+            tags:
+            {
+                "Cod_Cliente": codigoERP,
+                "Empresa": nomeAdministradora,
+                "Produto": nomeAplicacao
+            },
+            salute: `${nomeUsuario}, tudo bem?`,
+            thanks: `Obrigado, ${nomeUsuario}!`
+        };
+        var e;
+        var c = f.getElementsByTagName(b)[0];
+        if (f.getElementById(g)) { return }
+        e = f.createElement(b);
+        e.id = g;
+        e.src = 'https://cdn.tracksale.co/tracksale-js/tracksale.js';
+        e.type = 'text/javascript';
+        e.async = true;
+        e.onload = e.onreadystatechange = function () { var h = this.readyState; if (h && h != 'complete' && h != 'loaded') { return } try { var d = new Tracksale(); d.init(a) } catch (i) { } };
+        c.parentNode.insertBefore(e, c)
+    }(document, 'script', 'tracksale-js'));
+</script>
